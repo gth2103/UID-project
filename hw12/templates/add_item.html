@@ -1,0 +1,167 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<div class="row m-2 ml-4 mt-4">
+    <div class="col-10 ml-5">
+        <form id="add_item_form">
+            <div class="form-group">
+                <label for="characterID">ID:</label>
+                <input id="charID" class="form-control" type="number" placeholder="{{current_index}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input id="title" class="form-control" type="text" aria-describedby="titleHelp" placeholder="Enter title" minlength="2" required>
+                <small id="titleHelp" class="form-text text-muted">Please enter the alias and/or name of the character you wish to add.</small>
+            </div>
+            <div class="form-group">
+                <label for="img">Image:</label>
+                <input id="img" class="form-control" type="url" aria-describedby="imgHelp" placeholder="Enter image URL" required>
+                <small id="imgHelp" class="form-text text-muted">Please enter a url for the character's image.</small>
+            </div>
+            <div class="form-group">
+                <label for="inlineRadioOptions1">Status:</label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions1" id="inlineRadioSecret" value="Secret" required>
+                    <label class="form-check-label" for="inlineRadioSecret">Secret</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions1" id="inlineRadioPublic" value="Public" required>
+                    <label class="form-check-label" for="inlineRadioPublic">Public</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions1" id="inlineRadioUnknown" value="Unknown" required>
+                    <label class="form-check-label" for="inlineRadioUnknown">Unkown</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="textareaSummary">Summary:</label>
+                <textarea class="form-control" id="textareaSummary" rows="3" required></textarea>
+                <small id="textareaSummaryHelp" class="form-text text-muted">Describe the character in the area above.</small>
+            </div>
+           <div class="form-group">
+               <label for="align">Alignment:</label>
+               <select class="form-control" id="align" required>
+                   <option disabled selected value> Select ... </option>
+                   <option>Bad</option>
+                   <option>Good</option>
+                   <option>Neutral</option>
+                   <option>Reformed Criminal</option>
+               </select>
+            </div>
+           <div class="form-group">
+               <label for="eye">Eye Color:</label>
+               <select class="form-control" id="eye" required>
+                   <option disabled selected value> Select ... </option>
+                   <option>Amber</option>
+                   <option>Black</option>
+                   <option>Blue</option>
+                   <option>Brown</option>
+                   <option>Gold</option>
+                   <option>Green</option>
+                   <option>Grey</option>
+                   <option>Hazel</option>
+                   <option>Photocellular</option>
+                   <option>Pink</option>
+                   <option>Purple</option>
+                   <option>Red</option>
+                   <option>Silver</option>
+                   <option>Violet</option>
+                   <option>Yellow</option>
+               </select>
+            </div>
+           <div class="form-group">
+               <label for="hair">Hair Color:</label>
+               <select class="form-control" id="hair" required>
+                   <option disabled selected value> Select ... </option>
+                   <option>Auburn</option>
+                   <option>Bald</option>
+                   <option>Black</option>
+                   <option>Blonde</option>
+                   <option>Blue</option>
+                   <option>Brown</option>
+                   <option>Gold</option>
+                   <option>Green</option>
+                   <option>Grey</option>
+                   <option>Orange</option>
+                   <option>Pink</option>
+                   <option>Purple</option>
+                   <option>Red</option>
+                   <option>Silver</option>
+                   <option>Strawberry Blonde</option>
+                   <option>Violet</option>
+                   <option>White</option>
+               </select>
+            </div>
+            <div class="form-group">
+                <label for="inlineRadioOptions2">Gender:</label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions2" id="inlineRadioFemale" value="Female" required>
+                    <label class="form-check-label" for="inlineRadioFemale">Female</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions2" id="inlineRadioMale" value="Male" required>
+                    <label class="form-check-label" for="inlineRadioMale">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions2" id="inlineRadioGenderless" value="Genderless" required>
+                    <label class="form-check-label" for="inlineRadioGenderless">Genderless</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions2" id="inlineRadioTransgender" value="Transgender" required>
+                    <label class="form-check-label" for="inlineRadioTransgender">Transgender</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inlineRadioOptions3">Alive:</label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions3" id="inlineRadioLiving" value="Living" required>
+                    <label class="form-check-label" for="inlineRadioLiving">Living</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions3" id="inlineRadioDeceased" value="Deceased" required>
+                    <label class="form-check-label" for="inlineRadioDeceased">Deceased</label>
+                </div>
+            </div>
+            <div class="form-group">
+               <label for="gsm">Appearance:</label>
+               <select  class="form-control" id="appear" type="number" required>
+               </select>
+            </div>
+            <button id="submit" type="submit" class="btn btn-primary mb-5" data-toggle="modal" data-target="#modalValid">Submit</button>
+            <footer>
+                Add Item Page
+            </footer>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="modalValid" tabindex="-1" role="dialog" aria-labelledby="modalValidTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalValidTitle"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+
+        <script type="text/javascript" src="{{ url_for('static', filename = 'add_item.js') }}"></script>
+
+
+        <script type=text/javascript>
+        </script>
+
+{% endblock %}
+

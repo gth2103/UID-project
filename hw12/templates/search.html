@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<div class="row m-1 mt-4">
+    <div class="col-12">
+        <div class='discover block'>
+            <div class='heading-columns'>
+                <div class='search-bar inline-search'>
+                    <form id='search-discover'>
+                        <input type="text" id="search-discover-input" class="controls">
+                    </form>
+                </div>
+                <div class='clear'></div>
+            </div>
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+
+        <script type="text/javascript" src="{{ url_for('static', filename = 'search.js') }}"></script>
+
+        <script type=text/javascript>
+            var restaurants = {{restaurants|tojson|safe}}
+        </script>
+
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCgLtBGAynwQz8irTIbZ0USNbPIBY5xYhQ&libraries=places&callback=initMap"></script>
+
+{% endblock %}
+

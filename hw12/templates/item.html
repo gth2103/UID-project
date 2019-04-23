@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<div class="row m-2 ml-4">
+    <div class="col-10 ml-5">
+        <div id="characters">
+        </div>
+        <footer>
+            Item Page
+        </footer>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+
+        <script type="text/javascript" src="{{ url_for('static', filename = 'item.js') }}"></script>
+
+        <script type=text/javascript>
+            var characters = {{characters|tojson|safe}}
+            var item_id = {{item_id|tojson|safe}}
+        </script>
+
+{% endblock %}
+
