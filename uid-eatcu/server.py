@@ -33,7 +33,6 @@ def search():
             position = json_data["position"]
 
             new_item_entry = {
-                "index": restaurants_index,
                 "id": id,
                 "title": title,
                 "address": address,
@@ -42,7 +41,9 @@ def search():
             }
 
             restaurants_index +=1
-            restaurants.append(new_item_entry)
+
+            if new_item_entry not in restaurants:
+                restaurants.append(new_item_entry)
 
         else :
 
@@ -53,21 +54,25 @@ def search():
             starttime = json_data["starttime"]
             endtime = json_data["endtime"]
             notes = json_data["notes"]
+            address = json_data["address"]
 
 
             new_item_entry = {
-                "index": appointments_index,
                 "id": id,
                 "title": title,
                 "date": date,
                 "starttime": starttime,
                 "endtime": endtime,
-                "notes": notes
+                "notes": notes,
+                "address": address
             }
 
             appointments_index += 1
-            appointments.append(new_item_entry)
+            
+            if new_item_entry not in appointments:
+                appointments.append(new_item_entry)
 
+            print(appointments)
         return jsonify(restaurants = restaurants, appointments = appointments)
     else:
         return render_template('search.html', appointments = appointments, restaurants = restaurants, restaurants_index = restaurants_index, appointments_index = appointments_index)
