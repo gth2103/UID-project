@@ -1,23 +1,22 @@
 {% extends 'layout.html' %}
 {% block content %}
 
-<div class="row m-1 mb-4 p-5">
-    <div class="col-12">
-        <div class='discover block'>
-            <div class='heading-columns'>
-                <div class='search-bar inline-search'>
-                    <form id='search-discover'>
-                        <input type="text" id="search-discover-input" class="controls">
-                    </form>
-                </div>
-                <div class='clear'></div>
-            </div>
-                <div id="map"></div>
-            </div>
+<div class="row m-1 mt-5 mb-4 p-5">
+    <div class="col-12 mt-2">
+        <div id="map">
         </div>
+        <form id='search-discover'>
+            <input type="text" id="search-discover-input" class="controls">
+        </form>
     </div>
 </div>
-
+<div class="row">
+    <div class="col">
+        <footer class="mb-4 text-center fixed-bottom">
+            Copyright &copy
+        </footer>
+    </div>
+</div>
 {% endblock %}
 
 {% block javascript %}
