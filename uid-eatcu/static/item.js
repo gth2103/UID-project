@@ -1,19 +1,25 @@
-var character
+var restaurant;
+var count  = 2;
 
-var display_item = function(characters, item_id) {
+function get_appointments() {
 
-    for(var i=0; i < characters.length; i++) {
-        if(characters[i].id == item_id){
-        character = characters[i]
+    appointments.forEach(function(appointment) {
+
+        count++;
+
+        if  (count % 2 == 0) {
+            restaurant = '<br><div class="bg-light p-2"><p><strong><big><b><span class="title">' + appointment.title + '</span></b></big></strong></p><br><p><span class="info">Date: </span>' + appointment.date + '</p><p><span class="info">Start time: </span>' + appointment.starttime + '</p><p><span class="info">End time: </span>' + appointment.endtime + '</p><p><span class="info">Notes: </span><br><span class="notes">' + appointment.notes + '</span></p></div>'
         }
-    }
-    var newDiv = '<br><div><p><strong><big><b>' + character.title + '</b></big></strong></p><br><p><span class="info">Appearance: </span>' + character.appear + '</p><p><span class="info">Alive: </span>' + character.alive + '</p><br><p><span class="info">Status: </span>' + character.stat + '</p><p><span class="info">Alignment: </span>' + character.align + '</p><br><p><span class="info">Summary: </span><br><span class="summary">' + character.summary + '</span></p><br><small><p><span class="info">Eye: </span>' + character.eye + '</p><p><span class="info">Hair: </span>' + character.hair + '</p><p><span class="info">Gender: </span>' + character.gender + '</p></small><br><p>Image: <a href="' + character.img + '">Link</a></p><br><br></div>'
-    $('#characters').html(newDiv)
+        else {
+            restaurant = '<br><div class="p-2"><p><strong><big><b><span class="title">' + appointment.title + '</span></b></big></strong></p><br><p><span class="info">Date: </span>' + appointment.date + '</p><p><span class="info">Start time: </span>' + appointment.starttime + '</p><p><span class="info">End time: </span>' + appointment.endtime + '</p><p><span class="info">Notes: </span><br><span class="notes">' + appointment.notes + '</span></p></div>'
+        }
+
+        $('#appointments').append(restaurant);
+    });
 }
 
 $(document).ready(function(){
 
-display_item(characters, item_id)
+    get_appointments();
 
 });
-

@@ -68,7 +68,9 @@ def search():
             }
 
             appointments_index += 1
-            
+           
+
+ 
             if new_item_entry not in appointments:
                 appointments.append(new_item_entry)
 
@@ -76,6 +78,11 @@ def search():
         return jsonify(restaurants = restaurants, appointments = appointments)
     else:
         return render_template('search.html', appointments = appointments, restaurants = restaurants, restaurants_index = restaurants_index, appointments_index = appointments_index)
+
+@app.route('/item', methods=['GET'])
+def item():
+    global appointments
+    return render_template('item.html', appointments = appointments);
 
 if __name__ == '__main__':
     app.run(debug = True)

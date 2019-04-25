@@ -38,13 +38,24 @@ var yellow = "yellow";
 
 function clearMarkers() {
 
+    var exempt = false;
     // Clear out the old markers.
 
     markers.forEach(function(marker) {
-        marker.setMap(null);
+        appointments.forEach(function(appointment) {
+            if(_.isEqual(marker.title, appointment.title)) {
+                exempt = true;
+            }
+        });
+        if(!exempt) {
+ 
+            var index = markers.indexOf(marker);
+ 
+            if (index > -1) {
+                markers.splice(index, 1);
+            }
+        }       
     });
-
-    markers = [];
 }
 
 function search(newItem, appointment){
@@ -76,10 +87,17 @@ function initMap() {
         mapTypeId: 'roadmap'
     });
 
+    var defaultBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(40.819684, -73.933929),
+        new google.maps.LatLng(40.800294, -73.974440));
+
     // Create the search box and link it to the UI element.
 
     input = document.getElementById('search-discover-input');
-    searchBox = new google.maps.places.SearchBox(input);
+    searchBox = new google.maps.places.SearchBox(input, {
+        bounds: defaultBounds,
+        types: ['(restaurants)'],
+    });
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
     // Bias the SearchBox results towards current map's viewport.
@@ -91,6 +109,9 @@ function initMap() {
     markers = [];
 
     searchBox.addListener('places_changed', function() {
+
+        clearMarkers();
+
         places = searchBox.getPlaces();
 
         if (places.length == 0) {

@@ -3,7 +3,7 @@
 
 <div class="row m-2 ml-4">
     <div class="col-10 ml-5">
-        <div id="characters">
+        <div id="appointments">
         </div>
         <footer>
             Item Page
@@ -18,8 +18,7 @@
         <script type="text/javascript" src="{{ url_for('static', filename = 'item.js') }}"></script>
 
         <script type=text/javascript>
-            var characters = {{characters|tojson|safe}}
-            var item_id = {{item_id|tojson|safe}}
+            var appointments = {{appointments|tojson|safe}}
         </script>
 
 {% endblock %}
