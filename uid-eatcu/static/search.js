@@ -17,7 +17,7 @@ var bounds;
 var icon;
 
 var request;
-var infowindow;
+
 var infocontents;
 
 var service;
@@ -31,6 +31,8 @@ var green = "green";
 var red = "red";
 var yellow = "yellow";
 
+
+
 function clearMarkers() {
 
     // Clear out the old markers.
@@ -42,7 +44,7 @@ function clearMarkers() {
     markers = [];
 }
 
-var search = function(newItem, appointment){
+function search(newItem, appointment){
     var item_to_add = newItem
     $.ajax({
         type: "POST",
@@ -80,7 +82,7 @@ function initMap() {
     // Bias the SearchBox results towards current map's viewport.
 
     map.addListener('bounds_changed', function() {
-           searchBox.setBounds(map.getBounds());
+        searchBox.setBounds(map.getBounds());
     });
 
     markers = [];
@@ -92,33 +94,34 @@ function initMap() {
           return;
         }
 
-       // For each place, get the icon, name and location.
+        // For each place, get the icon, name and location.
 
-       places.forEach(function(place) {
+        places.forEach(function(place) {
 
-          if (!place.geometry) {
+            if (!place.geometry) {
                 console.log("Returned place contains no geometry");
                 return;
-          }
+            }
 
-          restaurant_exists = false;
+            restaurant_exists = false;
 
-          restaurants.forEach(function(restaurant) {
+            restaurants.forEach(function(restaurant) {
 
-              if (restaurant.address == place.address) {
-                 restaurant_exists = true;
-              }
-          });
+                if (_.isEqual(restaurant.address, place.address)) {
+                    restaurant_exists = true;
+                }
+            });
 
-          if (!restaurant_exists) { 
-              entry = {
-              title: place.name,
-              id: place.id,
-              address: place.formatted_address,
-              icon: place.icon,
-              position: place.geometry.location
-              } 
-              search(entry, false);
+            if (!restaurant_exists) { 
+                new_restaurant = {
+                title: place.name,
+                id: place.id,
+                address: place.formatted_address,
+                icon: place.icon,
+                position: place.geometry.location
+            } 
+            
+            search(new_restaurant, false);
           }
 
           setIcons(); 
@@ -130,32 +133,24 @@ function initMap() {
 
 function setIcon(restaurant, color) {
 
-          icon = {
-              url: "http://maps.google.com/mapfiles/ms/icons/" + color + "-dot.png",
-              size: new google.maps.Size(71, 71),
-              origin: new google.maps.Point(0, 0),
-              anchor: new google.maps.Point(17, 34),
-              scaledSize: new google.maps.Size(25, 25)
-          };
+    icon = {
+        url: "http://maps.google.com/mapfiles/ms/icons/" + color + "-dot.png",
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+    };
 
-          var position = {lat: restaurant.position.lat, lng: restaurant.position.lng};
+    var position = restaurant.position;
 
-
-         console.log(restaurant.position.lat);
-
-          // Create a marker for a place.
+    // Create a marker for a place.
  
-          markers.push(new google.maps.Marker({
-              map: map,
-              icon: icon,
-              title: restaurant.name,
-              position: position
-          }));
-        markers.forEach(function(marker) {
-          console.log("I am a marker",marker.position);
-          console.log(marker.get('position'));
-          console.log(marker.getPosition().lat());
-        });
+    markers.push(new google.maps.Marker({
+        map: map,
+        icon: icon,
+        title: restaurant.name,
+        position: position
+    }));
 }
 
 function setIcons() { 
@@ -163,65 +158,59 @@ function setIcons() {
 
         //@TODO: conditional statemenet to  set icon red/yellow/green based on appointment status
 
-                appointment_exists = false;
+        appointment_exists = false;
 
-                appointments.forEach(function(appointment) {
+        appointments.forEach(function(appointment) {
 
-                    if (appointment.address == restaurant.address) {
+            if (_.isEqual(appointment.address, restaurant.address)) {
  
-                       setIcon(restaurant, green);
-                       appointment_exists  = true;
-                    }
-                });
-                if (!appointment_exists) {
+                setIcon(restaurant, green);
+                appointment_exists  = true;
+            }
+        });
+        
+        if (!appointment_exists) {
 
-                    setIcon(restaurant, red);
+            setIcon(restaurant, red);
 
-                }
+        }
  
         markers.forEach(function(marker) {
 
-            infowindow = new google.maps.InfoWindow();
+            var infowindow = new google.maps.InfoWindow();
+            var marker_position = marker.getPosition().toJSON();
 
             //@TODO: conditional, if in appointments infocontents = item, else form
 
-
-
             google.maps.event.addListener(marker, 'click', function() {
 
-                 var position = marker.getPosition();
-                 
-                 console.log(position);
+                var appointmentMarker = false;
 
-                 if (appointments.length == 0) {
+                appointments.forEach(function(appointment) {
 
-                            infocontents = '<div class="row m-2 ml-4 mt-4"><div class="col-10 ml-5"><form id="add_item_form"><div class="form-group"><input id="id" class="form-control" type="hidden" value="' + restaurant.id + '"></div><div class="form-group"><label for="title">Place:</label><input id="title" class="form-control" type="text" aria-describedby="titleHelp" placeholder="' + restaurant.title + '"  value="' + restaurant.title + '" minlength="2" readonly></div><div class="form-group"><label for="date">Date:</label><input id="date" class="form-control" type="text" aria-describedby="dateHelp" placeholder="mm/dd/yyyy" required><small id="dateHelp" class="form-text text-muted">Please enter the date in the specified format.</small></div><div class="form-group"><label for="starttime">Start time:</label><input id="starttime" class="form-control time" type="time" aria-describedby="starttimeHelp" placeholder="h:mm p" required><small id="starttimeHelp" class="form-text text-muted">Please enter the start time in the specified format.</small></div><div class="form-group"><label for="endtime">End time:</label><input id="endtime" class="form-control time" type="time" aria-describedby="endtimeHelp" placeholder="h:mm p" required><small id="endtimeHelp" class="form-text text-muted">Please enter the end time in the specified format.</small></div><div class="form-group"><label for="textareaNotes">Notes:</label><textarea class="form-control" id="textareaSummary" rows="3"></textarea></div><input id="submit" type="submit" class="btn btn-primary mb-5" value="Submit"></form></div></div>'
-                 }
-
-                    appointments.forEach(function(appointment) {
-
-                        if (appointment.address == restaurant.address && restaurant.position == position) {
+                    if (_.isEqual(appointment.address, restaurant.address) && _.isEqual(restaurant.position, marker_position)) {
         
-                            infocontents = '<br><div><p><strong><big><b>' + appointment.title + '</b></big></strong></p><br><p><span class="info">Date: </span>' + appointment.date + '</p><p><span class="info">Start time: </span>' + appointment.starttime + '</p><br><p><span class="info">End time: </span>' + appointment.endtime + '</p><br><p><span class="info">Notes: </span><br><span class="notes">' + appointment.notes + '</span></p></div'
-                        }
-                        else {
-                            infocontents = '<div class="row m-2 ml-4 mt-4"><div class="col-10 ml-5"><form id="add_item_form"><div class="form-group"><input id="id" class="form-control" type="hidden" value="' + restaurant.id + '"></div><div class="form-group"><label for="title">Place:</label><input id="title" class="form-control" type="text" aria-describedby="titleHelp" placeholder="' + restaurant.title + '"  value="' + restaurant.title + '" minlength="2" readonly></div><div class="form-group"><label for="date">Date:</label><input id="date" class="form-control" type="text" aria-describedby="dateHelp" placeholder="mm/dd/yyyy" required><small id="dateHelp" class="form-text text-muted">Please enter the date in the specified format.</small></div><div class="form-group"><label for="starttime">Start time:</label><input id="starttime" class="form-control time" type="time" aria-describedby="starttimeHelp" placeholder="h:mm p" required><small id="starttimeHelp" class="form-text text-muted">Please enter the start time in the specified format.</small></div><div class="form-group"><label for="endtime">End time:</label><input id="endtime" class="form-control time" type="time" aria-describedby="endtimeHelp" placeholder="h:mm p" required><small id="endtimeHelp" class="form-text text-muted">Please enter the end time in the specified format.</small></div><div class="form-group"><label for="textareaNotes">Notes:</label><textarea class="form-control" id="textareaSummary" rows="3"></textarea></div><input id="submit" type="submit" class="btn btn-primary mb-5" value="Submit"></form></div></div>'
-                      }
-                  });
+                        infocontents = '<br><div><p><strong><big><b>' + appointment.title + '</b></big></strong></p><br><p><span class="info">Date: </span>' + appointment.date + '</p><p><span class="info">Start time: </span>' + appointment.starttime + '</p><br><p><span class="info">End time: </span>' + appointment.endtime + '</p><br><p><span class="info">Notes: </span><br><span class="notes">' + appointment.notes + '</span></p></div>'
 
- 
+                        appointmentMarker = true;
+                    }
+                });
+
+                if(!appointmentMarker) {
+                    infocontents = '<div class="row m-2 ml-4 mt-4"><div class="col-10 ml-5"><form id="add_item_form"><div class="form-group"><input id="id" class="form-control" type="hidden" value="' + restaurant.id + '"></div><div class="form-group"><label for="title">Place:</label><input id="title" class="form-control" type="text" aria-describedby="titleHelp" placeholder="' + restaurant.title + '"  value="' + restaurant.title + '" minlength="2" readonly></div><div class="form-group"><label for="date">Date:</label><input id="date" class="form-control" type="text" aria-describedby="dateHelp" placeholder="mm/dd/yyyy" required><small id="dateHelp" class="form-text text-muted">Please enter the date in the specified format.</small></div><div class="form-group"><label for="starttime">Start time:</label><input id="starttime" class="form-control time" type="time" aria-describedby="starttimeHelp" placeholder="h:mm p" required><small id="starttimeHelp" class="form-text text-muted">Please enter the start time in the specified format.</small></div><div class="form-group"><label for="endtime">End time:</label><input id="endtime" class="form-control time" type="time" aria-describedby="endtimeHelp" placeholder="h:mm p" required><small id="endtimeHelp" class="form-text text-muted">Please enter the end time in the specified format.</small></div><div class="form-group"><label for="textareaNotes">Notes:</label><textarea class="form-control" id="textareaSummary" rows="3"></textarea></div><input id="submit" type="submit" class="btn btn-primary mb-5" value="Submit"></form></div></div>'
+                } 
 
                 infowindow.setContent(infocontents);
                 
-                google.maps.event.addListener(infowindow, 'domready', function() {
+                if(_.isEqual(restaurant.position, marker_position)) {
 
-                // Bind the click event on your button here
+                    google.maps.event.addListener(infowindow, 'domready', function() {
+
+                    // Bind the click event on your button here
 
                     $('#submit').on('click', function(e){
 
                         e.preventDefault();
-
-                        setIcon(restaurant, yellow);
 
                         var id = $('input#id').val()
                         var title = $('input#title').val()
@@ -232,13 +221,14 @@ function setIcons() {
                         var address =  restaurant.address
 
                         var newItem = jQuery.parseJSON( '{ "id": "' + id + '", "title": "' + title + '", "date": "' + date + '", "starttime": "' + starttime + '",  "endtime": "' + endtime + '", "notes": "' + notes + '", "address": "' + address + '" }')
-
+                        
                         search(newItem, true)
                     });
                 });
 
                 infowindow.open(map, this);
-                
+
+                }               
             });
         });
     });
