@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/GrantHewlett/Documents/columbia/spring_19/4170/hw/hw8/py3"
+set -gx VIRTUAL_ENV "/Users/GrantHewlett/Documents/columbia/spring_19/4170/hw/uid-project/py3"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

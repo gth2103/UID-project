@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/GrantHewlett/Documents/columbia/spring_19/4170/hw/hw8/py3"
+VIRTUAL_ENV="/Users/GrantHewlett/Documents/columbia/spring_19/4170/hw/uid-project/py3"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

@@ -8,7 +8,7 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV "/Users/GrantHewlett/Documents/columbia/spring_19/4170/hw/hw8/py3"
+setenv VIRTUAL_ENV "/Users/GrantHewlett/Documents/columbia/spring_19/4170/hw/uid-project/py3"
 
 set _OLD_VIRTUAL_PATH="$PATH"
 setenv PATH "$VIRTUAL_ENV/bin:$PATH"

@@ -1,8 +1,7 @@
-from flask import Flask
-from flask import render_template
-from flask import Response, request, jsonify
+from flask import Flask, render_template, Response, request, jsonify, redirect, url_for
 from app import app, db
 from app.models import *
+from flask_login import current_user, login_user, logout_user, login_required
 
 restaurants = []
 
@@ -11,6 +10,23 @@ appointments = []
 restaurants_index = len(restaurants);
 
 appointments_index = len(appointments);
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('search'))
+    form  = RegistrationForm()
+    if form.validate_on_submit():
+        commit_registration(form)
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    
+
+
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
