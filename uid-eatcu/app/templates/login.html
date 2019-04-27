@@ -1,3 +1,6 @@
+{% extends 'layout.html' %}
+{% block content %}
+
 <div class="row m-2 ml-4 mt-5">
     <div class="col-10 ml-5 mt-5">
         <div id="login">
@@ -14,7 +17,4 @@
 
         <script type="text/javascript" src="{{ url_for('static', filename = 'login.js') }}"></script>
 
-        <script type=text/javascript>
-            var appointments = {{appointments|tojson|safe}}
-        </script>
-
+{% endblock %}
