@@ -1,4 +1,4 @@
-from app.models imnport *
+from app.models import *
 
 def commit_registration(form) :
     user = User(username=(form.username.data).lower(), email=form.email.data)

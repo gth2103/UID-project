@@ -1,7 +1,9 @@
-from flask import Flask, render_template, Response, request, jsonify, redirect, url_for
+from flask import Flask, render_template, Response, request, jsonify, redirect, url_for, flash
 from app import app, db
 from app.models import *
 from app.forms import *
+from app.register import *
+
 from flask_login import current_user, login_user, logout_user, login_required
 
 restaurants = []
@@ -27,7 +29,7 @@ def login():
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('home')
+            next_page = url_for('search')
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
@@ -46,6 +48,7 @@ def register():
 
 
 @app.route('/search', methods=['GET', 'POST'])
+@login_required
 def search():
     global restaurants
     global appointments
@@ -113,6 +116,7 @@ def search():
         return render_template('search.html', appointments = appointments, restaurants = restaurants, restaurants_index = restaurants_index, appointments_index = appointments_index)
 
 @app.route('/item', methods=['GET'])
+@login_required
 def item():
     global appointments
     return render_template('item.html', appointments = appointments);
