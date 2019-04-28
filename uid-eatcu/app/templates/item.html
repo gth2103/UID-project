@@ -8,8 +8,45 @@
         <footer class="m-4 mt-5 text-center fixed-bottom">
             Copyright &copy
         </footer>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Email</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                     <form id='message' action="/item">
+                        <div class="modal-body">
+                            {{ form.hidden_tag() }}
+                            <div class='form-field'>
+                                {{ form.recipient_email(placeholder="To:") }}
+                                {% for error in form.recipient_email.errors %}
+                                <div class="validation-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <br>
+                            <div class='form-field'>
+                                {{ form.message(placeholder="Enter your message...") }}
+                                {% for error in form.message.errors %}
+                                <div class="validation-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button class='form-field-submit btn'>
+                                {{ form.submit(id='email-submit', value="Send", class='btn btn-outline-secondary') }}
+                            </button> 
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
 
 {% endblock %}
 

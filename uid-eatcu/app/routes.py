@@ -5,6 +5,7 @@ from app.forms import *
 from app.register import *
 
 from flask_login import current_user, login_user, logout_user, login_required
+from flask_mail import Message
 
 restaurants = []
 
@@ -119,7 +120,16 @@ def search():
 @login_required
 def item():
     global appointments
-    return render_template('item.html', appointments = appointments);
+    user = current_user
+    form = EmailForm()
+    if form.validate_on_submit():
+        msg = Message("Hi, from EATcu",
+                  sender=user.email,
+                  recipients=[form.recipient_email])
+        msg.body = appointments + " " + form.message
+        mail.send(msg)
+    return render_template('item.html',title='Appointments', form=form, appointments = appointments);
+
 
 if __name__ == '__main__':
     app.run(debug = True)
