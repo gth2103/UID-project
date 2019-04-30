@@ -3,6 +3,7 @@ from app import app, db
 from app.models import *
 from app.forms import *
 from app.register import *
+from app.events import *
 
 from flask_login import current_user, login_user, logout_user, login_required
 from flask_mail import Message
@@ -87,32 +88,47 @@ def search():
             json_data = request.get_json()
             id = json_data["id"]
             title = json_data["title"]
-            date = json_data["date"]
-            starttime = json_data["starttime"]
-            endtime = json_data["endtime"]
+            address = json_data["address"],
+            date = json_data["date"],
+            starttime = json_data["starttime"],
+            endtime = json_data["endtime"],
             notes = json_data["notes"]
-            address = json_data["address"]
-
 
             new_item_entry = {
                 "id": id,
                 "title": title,
+                "address": address,
                 "date": date,
                 "starttime": starttime,
                 "endtime": endtime,
-                "notes": notes,
-                "address": address
+                "notes": notes
             }
 
-            appointments_index += 1
-           
+            print(appointments)
 
- 
+            def convertDate(s):
+                return datetime.strptime(s, '%Y-%m-%d')    
+
+            def convertTime(s):
+                return datetime.strptime(s, '%H:%M') 
+
+            
+            event = Event(place_id=str(id), title=str(title), address=str(address[0]), date=convertDate(str(date[0])), start_time=convertTime(str(starttime[0])), end_time=convertTime(str(endtime[0])), notes=str(notes))
+            add_event(event)
+            add_user_event(event, current_user)
+
+            events = get_recent_events(current_user.id)
+
+            print(type(events))
+
+
+            appointments_index += 1
+
             if new_item_entry not in appointments:
                 appointments.append(new_item_entry)
 
-            print(appointments)
-        return jsonify(restaurants = restaurants, appointments = appointments)
+
+            return jsonify(restaurants = restaurants, appointments = appointments)       
     else:
         return render_template('search.html', appointments = appointments, restaurants = restaurants, restaurants_index = restaurants_index, appointments_index = appointments_index)
 

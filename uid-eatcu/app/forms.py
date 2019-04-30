@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextA
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import *
 from wtforms.fields.html5 import DateField
-from wtforms_components import TimeField
+from wtforms_components import DateTimeField
 
 class LoginForm(FlaskForm):
 	username = StringField('Username', validators=[DataRequired()])
@@ -34,3 +34,13 @@ class EmailForm(FlaskForm):
 	message = TextAreaField('Message', validators=[Length(min=0, max=1000)])
 	recipient_email = StringField('Email', validators=[DataRequired(), Email()])
 	submit = SubmitField('Email')
+
+class EventForm(FlaskForm):
+	place_id  = StringField('Place Id',validators=[DataRequired()])
+	title = StringField('Title', validators=[DataRequired()])
+	address = StringField('address',validators=[DataRequired()])
+	date = DateTimeField('Date', format='%Y-%m-%d', validators=[DataRequired()], render_kw={"placeholder": "yyyy-mm-dd"})
+	start_time = DateTimeField('Start Time', validators=[DataRequired()], render_kw={"placeholder": "hh:mm"})
+	end_time = DateTimeField('End Time', validators=[DataRequired()], render_kw={"placeholder": "hh:mm"})
+	notes = TextAreaField('Notes', validators=[Length(min=0, max=140)])
+	submit = SubmitField('Send')

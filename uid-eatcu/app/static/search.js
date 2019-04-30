@@ -184,7 +184,7 @@ function setIcons() {
 
         appointments.forEach(function(appointment) {
 
-            if (_.isEqual(appointment.address, restaurant.address)) {
+            if (_.isEqual(appointment.address[0], restaurant.address)) {
  
                 setIcon(restaurant, green);
                 appointment_exists  = true;
@@ -210,16 +210,19 @@ function setIcons() {
 
                 appointments.forEach(function(appointment) {
 
-                    if (_.isEqual(appointment.address, restaurant.address) && _.isEqual(restaurant.position, marker_position)) {
+                    console.log(appointment.address[0]) //false why?
+                    console.log(restaurant.address)
+
+                    if (_.isEqual(appointment.address[0], restaurant.address) && _.isEqual(restaurant.position, marker_position)) {
         
-                        infocontents = '<br><div><p><strong><big><b>' + appointment.title + '</b></big></strong></p><br><p><span class="info">Date: </span>' + appointment.date + '</p><p><span class="info">Start time: </span>' + appointment.starttime + '</p><p><span class="info">End time: </span>' + appointment.endtime + '</p><p><span class="info">Notes: </span><br><span class="notes">' + appointment.notes + '</span></p></div>'
+                        infocontents = '<br><div><p><strong><big><b>' + appointment.title + '</b></big></strong></p><br><p><span class="info">Address: </span>' + appointment.address + '</p><p><span class="info">Date: </span>' + appointment.date + '</p><p><span class="info">Start time: </span>' + appointment.starttime + '</p><p><span class="info">End time: </span>' + appointment.endtime + '</p><p><span class="info">Notes: </span><br><span class="notes">' + appointment.notes + '</span></p></div>'
 
                         appointmentMarker = true;
                     }
                 });
 
                 if(!appointmentMarker) {
-                    infocontents = '<form id="add_item_form"><div class="form-group"><input id="id" class="form-control" type="hidden" value="' + restaurant.id + '"></div><div class="form-group"><label for="title">Place:</label><input id="title" class="form-control" type="text" aria-describedby="titleHelp" placeholder="' + restaurant.title + '"  value="' + restaurant.title + '" minlength="2" readonly></div><div class="form-group"><label for="date">Date:</label><input id="date" class="form-control" type="text" aria-describedby="dateHelp" placeholder="mm/dd/yyyy" required><small id="dateHelp" class="form-text text-muted">Please enter the date in the specified format.</small></div><div class="form-group"><label for="starttime">Start time:</label><input id="starttime" class="form-control time" type="time" aria-describedby="starttimeHelp" placeholder="h:mm p" required><small id="starttimeHelp" class="form-text text-muted">Please enter the start time in the specified format.</small></div><div class="form-group"><label for="endtime">End time:</label><input id="endtime" class="form-control time" type="time" aria-describedby="endtimeHelp" placeholder="h:mm p" required><small id="endtimeHelp" class="form-text text-muted">Please enter the end time in the specified format.</small></div><div class="form-group"><label for="textareaNotes">Notes:</label><textarea class="form-control" id="textareaSummary" rows="3"></textarea></div><input id="submit" type="submit" class="btn btn-secondary mb-5" value="Submit"></form>'
+                    infocontents = '<form id="add_item_form"><div class="form-group"><input id="id" class="form-control" type="hidden" value="' + restaurant.id + '"></div><div class="form-group"><label for="title">Place:</label><input id="title" class="form-control" type="text" area-describedby="titleHelp" placeholder="' + restaurant.title + '"  value="' + restaurant.title + '" minlength="2" readonly></div><div class="form-group"><label for="address">Address:</label><input id="address" class="form-control" type="text" area-describedby="addressHelp" placeholder="' + restaurant.address + '"  value="' + restaurant.address + '" minlength="2" readonly></div><div class="form-group"><label for="date">Date:</label><input id="date" class="form-control" type="text" aria-describedby="dateHelp" placeholder="yyyy-mm-dd" required><small id="dateHelp" class="form-text text-muted">Please enter the date in the specified format.</small></div><div class="form-group"><label for="starttime">Start time:</label><input id="starttime" class="form-control time" type="time" aria-describedby="starttimeHelp" placeholder="hh:mm" required><small id="starttimeHelp" class="form-text text-muted">Please enter the start time in the specified format.</small></div><div class="form-group"><label for="endtime">End time:</label><input id="endtime" class="form-control time" type="time" aria-describedby="endtimeHelp" placeholder="hh:mm" required><small id="endtimeHelp" class="form-text text-muted">Please enter the end time in the specified format.</small></div><div class="form-group"><label for="textareaNotes">Notes:</label><textarea class="form-control" id="textareaNotes" rows="3"></textarea></div><input id="submit" type="submit" class="btn btn-secondary mb-5" value="Submit"></form>'
                 } 
 
                 infowindow.setContent(infocontents);
@@ -239,7 +242,7 @@ function setIcons() {
                         var date = $('input#date').val()
                         var starttime = $('input#starttime').val()
                         var endtime = $('input#endtime').val()
-                        var notes = $.trim($('textarea#textareaNoes').val()).replace(/\"/g, "\\\"")
+                        var notes = $.trim($('textarea#textareaNotes').val()).replace(/\"/g, "\\\"")
                         var address =  restaurant.address
 
                         var newItem = jQuery.parseJSON( '{ "id": "' + id + '", "title": "' + title + '", "date": "' + date + '", "starttime": "' + starttime + '",  "endtime": "' + endtime + '", "notes": "' + notes + '", "address": "' + address + '" }')
