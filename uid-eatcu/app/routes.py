@@ -35,6 +35,11 @@ def login():
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -58,9 +63,29 @@ def search():
     global appointments_index
 
     appointment = request.args.get('appointment')
-   
+
+    appointments = [];
+
+    events = get_recent_events(current_user.id)
+
+    for event in events:
+        new_item_entry = {
+            "id": event.place_id,
+            "title": event.title,
+            "address": event.address,
+            "date": str(event.date),
+            "starttime": str(event.start_time.time()),
+            "endtime": str(event.end_time.time()),
+            "notes": event.notes,
+            "position": event.position
+        }
+
+        appointments.append(new_item_entry)
+
+        appointments_index += 1
+
     if request.method == 'POST':
-        print(appointment)
+
         if (appointment == 'false') :
 
             json_data = request.get_json()
@@ -93,18 +118,7 @@ def search():
             starttime = json_data["starttime"],
             endtime = json_data["endtime"],
             notes = json_data["notes"]
-
-            new_item_entry = {
-                "id": id,
-                "title": title,
-                "address": address,
-                "date": date,
-                "starttime": starttime,
-                "endtime": endtime,
-                "notes": notes
-            }
-
-            print(appointments)
+            position = json_data["position"]
 
             def convertDate(s):
                 return datetime.strptime(s, '%Y-%m-%d')    
@@ -113,20 +127,39 @@ def search():
                 return datetime.strptime(s, '%H:%M') 
 
             
-            event = Event(place_id=str(id), title=str(title), address=str(address[0]), date=convertDate(str(date[0])), start_time=convertTime(str(starttime[0])), end_time=convertTime(str(endtime[0])), notes=str(notes))
+            event = Event(place_id=str(id), title=str(title), address=str(address[0]), date=convertDate(str(date[0])), start_time=convertTime(str(starttime[0])), end_time=convertTime(str(endtime[0])), notes=str(notes), position=str(position))
             add_event(event)
             add_user_event(event, current_user)
 
             events = get_recent_events(current_user.id)
 
-            print(type(events))
 
+            print(type(event.date))
 
-            appointments_index += 1
+            print(type(event.start_time))
 
-            if new_item_entry not in appointments:
-                appointments.append(new_item_entry)
+            print(str(event.date))
 
+            print(str(event.start_time.time()))
+
+            for event in events:
+                new_item_entry = {
+                    "id": event.place_id,
+                    "title": event.title,
+                    "address": event.address,
+                    "date": str(event.date),
+                    "starttime": str(event.start_time.time()),
+                    "endtime": str(event.end_time.time()),
+                    "notes": event.notes,
+                    "position": event.position
+                }
+
+                if new_item_entry not in appointments:
+                    appointments.append(new_item_entry)
+
+                appointments_index += 1
+                        
+          
 
             return jsonify(restaurants = restaurants, appointments = appointments)       
     else:

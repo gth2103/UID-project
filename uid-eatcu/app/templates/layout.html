@@ -30,6 +30,12 @@
         <script  src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
         <style>
 
+            header{
+                color: lightgrey;
+                font-size: 36px;
+                font-weight: bold;
+            }
+
             footer{
                 color: lightgrey;
                 font-size: small;
@@ -50,11 +56,6 @@
 
             .info{
                 color: grey;
-            }
-
-            .notes{
-                font-family: courier;
-                font-size: small;
             }
 
             .nav-img:hover {
@@ -80,6 +81,7 @@
 
             #navbarNav {
                 position: absolute;
+                top: 0;
                 float: right;
                 right: 2.5rem;
                 padding: 0 5% 0 0;
@@ -92,12 +94,19 @@
                 margin: auto;
            }
 
-           #search-discover-input {
+            #search-discover-input {
                 display: block;
-                width: 25%;
+                width: 30%;
+                height:6%;
                 padding: 10px;
-                margin: 10px 0px 0px 20%;
-           }
+                margin: 10px 0px 0px 15%;
+                border-radius: 5px;
+            }
+
+            #search-discover-input::placeholder {
+                font-size: 14px;
+                color: #758990;
+            }
 
         </style>
     </head>
@@ -105,24 +114,43 @@
         <div class="row m-1">
             <div class="col-12">
                 <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top border-bottom pt-0 pb-0">
+                    <span title="Home">
                     <a class="ml-5 pl-2 navbar-brand" href="/search" style="text-decoration: none;">
                         <img src="../static/images/meal-icon.png" width="65" height="" class="d-inline-block align-center" alt="">
                         <span class="align-middle border-left pl-2" id='nav-title-1'>EAT</span><span class="align-text-top" id='nav-title-2'>CU</span>
                     </a>
+                    </span>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link p-0" href="/search">
+                                <span title="Map">
+                                <a class="nav-link p-0 pt-2" href="/search">
                                     <img  class="nav-img" src="../static/images/pin-map-icon-2-614x460.png" width="75" height="" class="d-inline-block align-center" alt="">
                                 </a>
+                                </span>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link p-0" href="/item">
+                                <span title="Meals">
+                                <a class="nav-link p-0 pt-2" href="/item">
+                                    <img class="nav-img" src="../static/images/fork-icon-614x460.png" width="75" height="" class="d-inline-block align-center" alt="">
+                                </a>
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link p-0 pt-2 dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <img class="nav-img" src="../static/images/post-icon-614x460.png" width="75" height="" class="d-inline-block align-center" alt="">
                                 </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="/search">Map</a>
+                                    <a class="dropdown-item" href="/item">Meals</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ url_for('logout') }}">
+                                        Log Out
+                                    </a>
+                                </div>
                             </li>
                         </ul>
                     </div>

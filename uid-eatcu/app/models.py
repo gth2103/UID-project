@@ -32,6 +32,7 @@ class Event(db.Model):
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
     notes = db.Column(db.Text)
+    position = db.Column(db.Text)
     address = db.Column(db.String(50))
     
 
@@ -44,7 +45,8 @@ class Event(db.Model):
             'start_time': self.start_time,
             'end_time': self.end_time,
             'notes': self.notes,
-            'address': self.address    
+            'address': self.address,
+            'position': self.position    
         }
 
 class UserEvent(db.Model):
@@ -63,5 +65,5 @@ class UserEvent(db.Model):
             'accepted': self.accepted
         }
 
-db.drop_all()
+#db.drop_all()
 db.create_all()

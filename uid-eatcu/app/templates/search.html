@@ -1,8 +1,15 @@
 {% extends 'layout.html' %}
 {% block content %}
-
-<div class="row m-1 mt-5 mb-4 p-5">
-    <div class="col-12 mt-2">
+<div class="container">
+<div class="row m-1 mt-5 pl-5 pr-5 pt-5 pb-1">
+    <div class="col ml-4">
+        <header>
+            Where to eat next?
+        </header>
+    </div>
+</div>
+<div class="row m-1 mb-5 pl-5 pr-5 pb-5 pt-1">
+    <div class="col-12 mt-2 mb-5">
         <div id="map">
         </div>
         <form id='search-discover'>
@@ -10,13 +17,15 @@
         </form>
     </div>
 </div>
-<div class="row">
+<div class="row mb-4 text-center fixed-bottom">
     <div class="col">
-        <footer class="mb-4 text-center fixed-bottom">
+        <footer>
             Copyright &copy
         </footer>
     </div>
 </div>
+</div>
+
 {% endblock %}
 
 {% block javascript %}
@@ -25,10 +34,6 @@
 
         <script type=text/javascript>
             var appointments = {{appointments|tojson|safe}}
-        </script>
-
-        <script type=text/javascript>
-            var restaurants = {{restaurants|tojson|safe}}
         </script>
 
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCgLtBGAynwQz8irTIbZ0USNbPIBY5xYhQ&libraries=places&callback=initMap"></script>

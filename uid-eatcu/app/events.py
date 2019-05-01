@@ -14,5 +14,5 @@ def add_user_event(event, current_user):
 
 def get_recent_events(user_id):
 	today = datetime.now()
-	events = db.session.query(Event).join(UserEvent, UserEvent.event_id == Event.id).filter(UserEvent.user_id == user_id, UserEvent.accepted == 1, Event.date >= today).order_by(asc(Event.date), asc(Event.start_time)).limit(3).all()
+	events = db.session.query(Event).join(UserEvent, UserEvent.event_id == Event.id).filter(UserEvent.user_id == user_id, UserEvent.accepted == 1, Event.date >= today).order_by(asc(Event.date), asc(Event.start_time)).limit(10).all()
 	return events
