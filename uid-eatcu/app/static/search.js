@@ -1,5 +1,5 @@
-//@TODO: limit search  space  to type:  restaurants,  food
-//@TODO: set markers for events  before , use geocoder to  get latlng object
+//@TODO: form validation for infowindow, do not allow old dates, specify 
+
 var map;
 var radius;
 var request;
@@ -64,7 +64,11 @@ function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: columbia,
         zoom: 16,
-        mapTypeId: 'roadmap'
+        mapTypeId: 'roadmap',
+        fullscreenControl: true,
+        fullscreenControlOptions: {
+              position: google.maps.ControlPosition.RIGHT_CENTER
+        }
     });
 
     appointments.forEach(function(appointment){
@@ -102,6 +106,12 @@ function initMap() {
         if (places.length == 0) {
           return;
         }
+
+        if (places.length > 10) {
+            places = (searchBox.getPlaces()).slice(0, 4);
+        }
+
+
 
         // For each place, get the icon, name and location.
 
@@ -257,6 +267,7 @@ function setIconColor(restaurant, color) {
 
 
 }
+
 
 
 $(document).ready(function(){

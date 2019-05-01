@@ -41,7 +41,6 @@ def logout():
     return redirect(url_for('login'))
 
 
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -70,7 +69,8 @@ def search():
 
     for event in events:
         new_item_entry = {
-            "id": event.place_id,
+            "id": event.id,
+            "place_id": event.place_id,
             "title": event.title,
             "address": event.address,
             "date": str(event.date),
@@ -158,14 +158,13 @@ def search():
                     appointments.append(new_item_entry)
 
                 appointments_index += 1
-                        
           
 
             return jsonify(restaurants = restaurants, appointments = appointments)       
     else:
         return render_template('search.html', appointments = appointments, restaurants = restaurants, restaurants_index = restaurants_index, appointments_index = appointments_index)
 
-@app.route('/item', methods=['GET'])
+@app.route('/item', methods=['GET', 'POST'])
 @login_required
 def item():
     global appointments
@@ -178,6 +177,12 @@ def item():
         msg.body = appointments + " " + form.message
         mail.send(msg)
     return render_template('item.html',title='Appointments', form=form, appointments = appointments);
+
+@app.route('/delete_event', methods=['GET'])
+@login_required
+def delete_event():
+    return render_template('item.html')
+
 
 
 if __name__ == '__main__':
