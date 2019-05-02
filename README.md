@@ -1,3 +1,3 @@
 # uid-project
 
-An app to schedule lunch datesm at Columbia University
+An app to schedule lunch dates at Columbia University
