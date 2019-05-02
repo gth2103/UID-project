@@ -6,8 +6,8 @@
         <header>
             What's happening?
         </header>
-        <small class="text-muted headerHelpLeft d-inline-block">See what's coming up!</small>
-        <small class="text-muted headerHelpRight d-inline-block text-right">Edit events, or invite friends below.</small>
+        <small class="text-muted headerHelpLeft d-inline-block">See what events are coming up!</small>
+        <small class="text-muted headerHelpRight d-inline-block text-right">Update events, or invite friends below.</small>
         <div id="appointments">
         </div>
         <footer class="m-4 mt-5 text-center fixed-bottom">
@@ -63,6 +63,7 @@
         <script type=text/javascript>
             var appointments = {{appointments|tojson|safe}}
         </script>
+
 
 {% endblock %}
 

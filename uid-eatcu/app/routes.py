@@ -178,11 +178,39 @@ def item():
         mail.send(msg)
     return render_template('item.html',title='Appointments', form=form, appointments = appointments);
 
-@app.route('/delete_event', methods=['GET'])
+@app.route('/remove_event/<event_id>', methods=['POST'])
 @login_required
-def delete_event():
-    return render_template('item.html')
+def remove_event(event_id):
+    global appointments
+    global appointments_index
+    user = current_user
+    form = EmailForm()
+    event = Event.query.filter_by(id=event_id).first()
+    print(event)
+    db.session.delete(event)
+    db.session.commit()
 
+    appointments = [];
+
+    events = get_recent_events(current_user.id)
+
+    for event in events:
+        new_item_entry = {
+            "id": event.id,
+            "place_id": event.place_id,
+            "title": event.title,
+            "address": event.address,
+            "date": str(event.date),
+            "starttime": str(event.start_time.time()),
+            "endtime": str(event.end_time.time()),
+            "notes": event.notes,
+            "position": event.position
+        }
+
+        appointments.append(new_item_entry)
+
+        appointments_index += 1
+    return redirect(url_for('item'));
 
 
 if __name__ == '__main__':

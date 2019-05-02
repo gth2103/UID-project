@@ -161,7 +161,7 @@ function initMarkers() {
 
         var geocoder = new google.maps.Geocoder();
 
-        var infowindow = new google.maps.InfoWindow();
+        var infowindow = new google.maps.InfoWindow({ maxWidth: 200 });
 
         var appointmentMarker = false;
 
