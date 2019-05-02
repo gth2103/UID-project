@@ -1,5 +1,5 @@
 //@TODO: Address, website button (place details), find friends (by e-mail/username), 
-//@TODO: create username,  add friends, invite friends button, update events, message friends
+//@TODO: create username,  add friends, invite friends button, update events button, message friends
 
 var restaurant;
 var count  = 2;

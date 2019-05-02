@@ -1,44 +1,50 @@
-{% extends 'layout.html' %}
+{% extends 'layout_login.html' %}
 {% block content %}
+<div id="content" class="position-absolute">
+        <div class="mt-5 text-right d-block">
+         <img src="../static/images/meal-icon.png" width="65" height="" class="d-inline-block align-center" alt="">
+        <span class="align-middle border-left pl-2" id='nav-title-1'>EAT</span><span class="align-text-top" id='nav-title-2'>CU</span>
+        </div>
 
-<div class="row m-2 ml-4 mt-5">
-    <div class="col-10 ml-5 mt-5">
-        <div id="login">
-            <h3>Log In</h3>
-            <form method="post">
-                <form class='login' action="" method="post">
+        <div class="mt-2 text-center d-block">
+            <small class="text-muted">Log In</small>
+            <br>
+            <br>
+            <form class='login' action="" method="post">
                 {{ form.hidden_tag() }}
                 <div class='form-field'>
-                    {{ form.username(placeholder="username") }}
+                    {{ form.username(placeholder=" Username") }}
                     {% for error in form.username.errors %}
                         <div class="validation-error">{{ error }}</div>
                     {% endfor %}
                 </div>
+                <br>
                 <div class='form-field'>
-                    {{ form.password(placeholder="password") }}
+                    {{ form.password(placeholder=" Password") }}
                     {% for error in form.password.errors %}
                         <div class="validation-error">{{ error }}</div>
                     {% endfor %}
                 </div>
-                <div class='form-field-submit'>
+                <br>
+                <small class='form-field-submit'>
                     <div class=''>
                         {{ form.remember_me() }}
                         {{ form.remember_me.label }}
                     </div>
-                    <div class='form-right'>
-                        {{ form.submit(id='login-submit', value="Submit", class='button button-1') }}
+                    <br>
+                    <div class='form-field-submit'>
+                        {{ form.submit(id='login-submit', value="Submit", class='btn btn-outline-info') }}
                     </div>
                     <div class='clear'></div>
-                </div>
+                </small>
             </form>
-            <div>
-                New to SPOT ME? <a href='{{ url_for("register") }}'>Sign Up</a>
-            </div>
+            <small>
+                New to EATcu? <a class="text-info" href='{{ url_for("register") }}'>Sign Up</a>
+            </small>
         </div>
         <footer class="m-4 mt-5 text-center fixed-bottom">
-            Copyright &copy
+            <small>Copyright &copy</small>
         </footer>
-    </div>
 </div>
 
 {% endblock %}
