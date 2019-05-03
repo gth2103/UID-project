@@ -29,15 +29,6 @@ var yellow = "yellow";
 var restaurants = [];
 
 
-//@TODO: check for and preserve markers for existing appointments during clear
-//@TODO: clear at each new instance of place search
-
-
-function reset(){
-
-
-}
-
 function search(newItem, appointment){
     var item_to_add = newItem
     $.ajax({
@@ -184,7 +175,7 @@ function initMarkers() {
                         scaledSize: new google.maps.Size(25, 25)
                     };
 
-                    infocontents = '<br><div><p><strong><big><b>' + appointment.title + '</b></big></strong></p><br><p><span class="info">Address: </span>' + appointment.address + '</p><p><span class="info">Date: </span>' + appointment.date + '</p><p><span class="info">Start time: </span>' + appointment.starttime + '</p><p><span class="info">End time: </span>' + appointment.endtime + '</p><p><span class="info">Notes: </span><br><br>' + appointment.notes + '</p></div>'
+                    infocontents = '<br><div class="pl-2"><p><strong><big><b><span class="title-window">' + appointment.title + '</span></b></big></strong><br><small><span class="title-help">' + appointment.address + '</span></small></p><p><span class="info-window"><small>Date: </small></span><b>' + appointment.date + '</b><br><span class="info-window"><small>Start time: </small></span><b>' + appointment.starttime + '</b><br><span class="info-window"><small>End time: </small></span><b>' + appointment.endtime + '</b></p><small><p><span class="info-window">Notes: </span><span class="notes ml-2">' + appointment.notes + '</span></p></small></div>'
                 }
             });
 

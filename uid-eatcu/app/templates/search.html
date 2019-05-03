@@ -1,8 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div class="container">
-<div class="row m-1 mt-5 pl-5 pr-5 pt-5 pb-1">
-    <div class="col ml-4">
+<div class="container parallax__layer parallax__layer--back">
+<div class="row m-1 mt-5 pl-5 pr-5 pt-5 pb-1 parallax__layer parallax__layer--base">
+    <div class="col ml-1 mr-1 p-2 pl-4 search-bar">
         <header>
             Where to eat next?
         </header>
@@ -10,14 +10,15 @@
         <small class="text-muted headerHelpRight d-inline-block text-right mr-2">Click <img src="http://maps.google.com/mapfiles/ms/icons/red-dot.png" height="12px"> to schedule an event, or <img src="http://maps.google.com/mapfiles/ms/icons/green-dot.png" height="12px"> to see what's cooking.</small>
     </div>
 </div>
-<div class="row m-1 mb-5 pl-5 pr-5 pb-5 pt-1">
-    <div class="col-12 mt-2 mb-5">
-        <div id="map">
+<div class="row m-1 mb-5 pl-5 pr-5 pb-5 pt-1 parallax__layer parallax__layer--base">
+    <div class="col-12 mt-2 mb-5 p-0 pt-2 content-map">
+        <div id="map" class="p-0">
         </div>
         <form id='search-discover'>
             <input type="text" id="search-discover-input" class="controls">
         </form>
     </div>
+</div>
 </div>
 <div class="row mb-4 text-center fixed-bottom">
     <div class="col">
@@ -25,7 +26,6 @@
             Copyright &copy
         </footer>
     </div>
-</div>
 </div>
 
 {% endblock %}

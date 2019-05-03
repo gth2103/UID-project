@@ -1,8 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div class="container">
+<div class="container parallax__layer parallax__layer--back">
 <div class="row m-2 ml-4 mt-5">
-    <div class="col-10 ml-5 mt-5">
+    <div class="col-10 ml-5 mt-5 mb-5 p-4 parallax__layer parallax__layer--base events">
         <header>
             What's happening?
         </header>
@@ -10,9 +10,6 @@
         <small class="text-muted headerHelpRight d-inline-block text-right">Update events, or invite friends below.</small>
         <div id="appointments">
         </div>
-        <footer class="m-4 mt-5 text-center fixed-bottom">
-            Copyright &copy
-        </footer>
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -40,7 +37,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" onclick="alertSent()"data-dismiss="modal">Close</button>
                             <button class='form-field-submit btn'>
                                 {{ form.submit(id='email-submit', value="Send", class='btn btn-outline-secondary') }}
                             </button> 
@@ -52,6 +49,14 @@
     </div>
 </div>
 </div>
+<div class="row mb-4 text-center fixed-bottom">
+    <div class="col">
+        <footer>
+            Copyright &copy
+        </footer>
+    </div>
+</div>
+
 
 
 {% endblock %}
