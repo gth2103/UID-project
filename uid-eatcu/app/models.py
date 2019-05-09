@@ -1,7 +1,7 @@
 from app import login_manager, db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from datetime import datetime, time, date
+from datetime import datetime, time, date, timedelta
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -64,6 +64,16 @@ class UserEvent(db.Model):
             'event_id': self.event_id,
             'accepted': self.accepted
         }
+
+class EventInvitation(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True, nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True, nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('event.id'), index=True, nullable=False)
+    sender = db.relationship("User", foreign_keys=[sender_id], backref=db.backref("sent_invitations", cascade="all,delete"))
+    receiver = db.relationship("User", foreign_keys=[receiver_id], backref=db.backref("received_invitations", cascade="all,delete"))
+    event = db.relationship("Event", foreign_keys=[event_id], backref=db.backref("invitations", cascade="all,delete"))
+
 
 #db.drop_all()
 db.create_all()

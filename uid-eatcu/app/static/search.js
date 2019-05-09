@@ -175,7 +175,8 @@ function initMarkers() {
                         scaledSize: new google.maps.Size(25, 25)
                     };
 
-                    infocontents = '<br><div class="pl-2"><p><strong><big><b><span class="title-window">' + appointment.title + '</span></b></big></strong><br><small><span class="title-help">' + appointment.address + '</span></small></p><p><span class="info-window"><small>Date: </small></span><b>' + appointment.date + '</b><br><span class="info-window"><small>Start time: </small></span><b>' + appointment.starttime + '</b><br><span class="info-window"><small>End time: </small></span><b>' + appointment.endtime + '</b></p><small><p><span class="info-window">Notes: </span><span class="notes ml-2">' + appointment.notes + '</span></p></small></div>'
+
+                    infocontents = '<br><div class="pl-2"><p><strong><big><b><span class="title-window">' + appointment.title + '</span></b></big></strong><br><small><span class="title-help">' + appointment.address + '</span></small></p><p><span class="info-window"><small>Date: </small></span><b>' + new Date(appointment.date).toUTCString().split(' ', 4).join(' ') + '</b><br><span class="info-window"><small>Start time: </small></span><b>' + appointment.starttime.slice(0, 5) + '</b><br><span class="info-window"><small>End time: </small></span><b>' + appointment.endtime.slice(0, 5) + '</b></p><small><p><span class="info-window">Notes: </span><span class="notes ml-2">' + appointment.notes + '</span></p></small></div>'
                 }
             });
 

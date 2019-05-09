@@ -16,6 +16,8 @@ restaurants_index = len(restaurants);
 
 appointments_index = len(appointments);
 
+users =  [];
+
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
@@ -168,15 +170,14 @@ def search():
 @login_required
 def item():
     global appointments
-    user = current_user
-    form = EmailForm()
-    if form.validate_on_submit():
-        msg = Message("Hi, from EATcu",
-                  sender=user.email,
-                  recipients=[form.recipient_email])
-        msg.body = appointments + " " + form.message
-        mail.send(msg)
-    return render_template('item.html',title='Appointments', form=form, appointments = appointments);
+    global users
+    all_users = User.query.all()
+
+    for user in all_users:
+        print(user.username)
+        users.append(user.username)
+    
+    return render_template('item.html',title='Appointments', users=users, appointments = appointments);
 
 @app.route('/remove_event/<event_id>', methods=['POST'])
 @login_required
@@ -210,6 +211,19 @@ def remove_event(event_id):
         appointments.append(new_item_entry)
 
         appointments_index += 1
+    return redirect(url_for('item'));
+
+
+@app.route('/invite_people/<event_id>/<username>', methods=['POST'])
+@login_required
+def invite_people(event_id, username):
+    print(event_id)
+    event = Event.query.filter_by(id=event_id).first()
+    print(event)
+    user = User.query.filter_by(username=username).first()
+    print(user)
+    print(current_user)
+    send_invite(event, current_user, user)
     return redirect(url_for('item'));
 
 
