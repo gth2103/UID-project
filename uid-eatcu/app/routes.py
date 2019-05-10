@@ -12,11 +12,18 @@ restaurants = []
 
 appointments = []
 
-restaurants_index = len(restaurants);
+users =  []
 
-appointments_index = len(appointments);
+invites =  []
 
-users =  [];
+
+restaurants_index = len(restaurants)
+
+appointments_index = len(appointments)
+
+invites_index = len(invites)
+
+users_index = len(users)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -83,7 +90,6 @@ def search():
         }
 
         appointments.append(new_item_entry)
-
         appointments_index += 1
 
     if request.method == 'POST':
@@ -105,10 +111,9 @@ def search():
                 "position": position
             }
 
-            restaurants_index +=1
-
             if new_item_entry not in restaurants:
                 restaurants.append(new_item_entry)
+                restaurants_index +=1
 
         else :
 
@@ -135,15 +140,6 @@ def search():
 
             events = get_recent_events(current_user.id)
 
-
-            print(type(event.date))
-
-            print(type(event.start_time))
-
-            print(str(event.date))
-
-            print(str(event.start_time.time()))
-
             for event in events:
                 new_item_entry = {
                     "id": event.place_id,
@@ -158,9 +154,7 @@ def search():
 
                 if new_item_entry not in appointments:
                     appointments.append(new_item_entry)
-
-                appointments_index += 1
-          
+                    appointments_index += 1
 
             return jsonify(restaurants = restaurants, appointments = appointments)       
     else:
@@ -171,13 +165,30 @@ def search():
 def item():
     global appointments
     global users
+    global invites
+    global users_index
+    global invites_index
+
     all_users = User.query.all()
+    invited = UserEvent.query.all()
 
     for user in all_users:
-        print(user.username)
         users.append(user.username)
+        users_index += 1
+
+    for invitee in invited:
+        if invitee.user_id != current_user.id:
+            new_invtee_entry = {
+                "username": invitee.user.username,
+                "event_id": invitee.event_id,
+                "accepted": invitee.accepted
+            }
+
+            if new_invtee_entry not in invites:
+                invites.append(new_invtee_entry)
+                invites_index += 1
     
-    return render_template('item.html',title='Appointments', users=users, appointments = appointments);
+    return render_template('item.html',title='Appointments', users=users, appointments = appointments,invites = invites);
 
 @app.route('/remove_event/<event_id>', methods=['POST'])
 @login_required
@@ -225,6 +236,35 @@ def invite_people(event_id, username):
     print(current_user)
     send_invite(event, current_user, user)
     return redirect(url_for('item'));
+
+
+
+@app.route("/accept_invitation/<user_event_id>/", methods=['POST'])
+@login_required
+def accept_invitation(user_event_id):
+    user_event = UserEvent.query.filter_by(id=user_event_id).first()
+    user_event.accepted = True
+    db.session.add(user_event)
+    sent_invitation, received_invitation = get_event_invitation(user_event.event_id, current_user.id)
+    remove_notification(received_invitation.receiver.id, user_event.event.id)
+    create_accept_notification(user_event, received_invitation.sender.id)
+    db.session.delete(received_invitation)
+    db.session.commit()
+    return jsonify(["Invitation accepted.", [{"user_event": u_e.serialize(), "user": u_e.user.serialize()} for u_e in user_event.event.user_events]])
+
+
+@app.route("/decline_invitation/<user_event_id>/", methods=['POST'])
+@login_required
+def decline_invitation(user_event_id):
+    user_event = UserEvent.query.filter_by(id=user_event_id).first()
+    sent_invitation, received_invitation = get_event_invitation(user_event.event_id, current_user.id)
+    remove_notification(received_invitation.receiver.id, user_event.event.id)
+    create_decline_notification(user_event, received_invitation.sender.id)
+    db.session.delete(user_event)
+    db.session.delete(received_invitation)
+    db.session.commit()
+    flash('Invitation declined.')
+    return redirect(url_for('event_new'))
 
 
 if __name__ == '__main__':

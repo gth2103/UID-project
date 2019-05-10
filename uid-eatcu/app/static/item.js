@@ -21,16 +21,36 @@ function get_appointments() {
         }
 
         $('#appointments').append(restaurant);
+        getInvites(appointment.id);
     });
 }
 
 
 
+function getInvites(event_key) {
+
+    invites.forEach(function(invite){
+        if(event_key === invite.event_id) { 
+            if(invite.accepted) {// @TODO: if invite.accepted = 1
+                $('div[accesskey|="' +  event_key + '"].invited').append("<small>" +  invite.username + "</small><br>"); 
+            }
+            else {
+                $('div[accesskey|="' +  event_key + '"].invited').append("<span class='pending'><small><i>" +  invite.username + " pending</i></small></span><br>");    
+            }
+        }
+    });
+}
+
+
 var searchbar = '<form class="form-inline"><div class="input-group"><div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">@</span></div><input type="text" class="form-control searchbar-input" placeholder="" aria-label="Username" aria-describedby="basic-addon1"></div></form>'
 
 
-function alertSent() {
-    alert("Your message was sent!")
+function alertDeleted() {
+    alert("Your event was deleted.")
+}
+
+function alertInvited(username) {
+    alert(username + " was invited.")
 }
 
 $(document).ready(function(){
@@ -46,6 +66,7 @@ $(document).ready(function(){
         var target = '.' + event_key;
 
         $.post(url);
+        alertDeleted();
         setTimeout(function(){
             location.reload(1);
         }, 800);
@@ -78,8 +99,11 @@ $(document).ready(function(){
                 var url = "/invite_people/" + event_key + "/" + username
 
                 $.post(url);
-                $('div[accesskey|="' +  event_key + '"].invited').append("<small>" +  username + "</small><br>"); //Temporary ... need to get userevents from database and return accepted and requested.... if  accepted=True blue, else grey, italics.
-                
+                alertInvited(username)
+                getInvites(event_key)
+                setTimeout(function(){
+                    location.reload(1);
+                }, 800);  
             }
         });
     });

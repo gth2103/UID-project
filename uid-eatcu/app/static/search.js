@@ -161,40 +161,40 @@ function initMarkers() {
         var icon;
 
 
-            appointments.forEach(function(appointment) {
+        appointments.forEach(function(appointment) {
 
-                if (_.isEqual(appointment.address, restaurant.address)) {
+            if (_.isEqual(appointment.address, restaurant.address)) {
 
-                    appointmentMarker = true;
-
-                    icon = {
-                        url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
-                        size: new google.maps.Size(71, 71),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(17, 34),
-                        scaledSize: new google.maps.Size(25, 25)
-                    };
-
-
-                    infocontents = '<br><div class="pl-2"><p><strong><big><b><span class="title-window">' + appointment.title + '</span></b></big></strong><br><small><span class="title-help">' + appointment.address + '</span></small></p><p><span class="info-window"><small>Date: </small></span><b>' + new Date(appointment.date).toUTCString().split(' ', 4).join(' ') + '</b><br><span class="info-window"><small>Start time: </small></span><b>' + appointment.starttime.slice(0, 5) + '</b><br><span class="info-window"><small>End time: </small></span><b>' + appointment.endtime.slice(0, 5) + '</b></p><small><p><span class="info-window">Notes: </span><span class="notes ml-2">' + appointment.notes + '</span></p></small></div>'
-                }
-            });
-
-            if(!appointmentMarker) {
+                appointmentMarker = true;
 
                 icon = {
-                        url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
-                        size: new google.maps.Size(71, 71),
-                        origin: new google.maps.Point(0, 0),
-                        anchor: new google.maps.Point(17, 34),
-                        scaledSize: new google.maps.Size(25, 25)
-                    }; 
+                    url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+                    size: new google.maps.Size(71, 71),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(17, 34),
+                    scaledSize: new google.maps.Size(25, 25)
+                };
 
-                infocontents = '<form id="add_item_form"><div class="form-group"><input id="id" class="form-control" type="hidden" value="' + restaurant.id + '"></div><div class="form-group"><label for="title">Place:</label><input id="title" class="form-control" type="text" area-describedby="titleHelp" placeholder="' + restaurant.title + '"  value="' + restaurant.title + '" minlength="2" readonly></div><div class="form-group"><label for="address">Address:</label><input id="address" class="form-control" type="text" area-describedby="addressHelp" placeholder="' + restaurant.address + '"  value="' + restaurant.address + '" minlength="2" readonly></div><div class="form-group"><label for="date">Date:</label><input id="date" class="form-control" type="text" aria-describedby="dateHelp" placeholder="yyyy-mm-dd" required><small id="dateHelp" class="form-text text-muted">Please enter the date in the specified format.</small></div><div class="form-group"><label for="starttime">Start time:</label><input id="starttime" class="form-control time" type="time" aria-describedby="starttimeHelp" placeholder="hh:mm" required><small id="starttimeHelp" class="form-text text-muted">Please enter the start time in the specified format.</small></div><div class="form-group"><label for="endtime">End time:</label><input id="endtime" class="form-control time" type="time" aria-describedby="endtimeHelp" placeholder="hh:mm" required><small id="endtimeHelp" class="form-text text-muted">Please enter the end time in the specified format.</small></div><div class="form-group"><label for="textareaNotes">Notes:</label><textarea class="form-control" id="textareaNotes" rows="3"></textarea></div><input id="submit" type="submit" class="btn btn-secondary mb-5" value="Submit"></form>'
 
+                infocontents = '<br><div class="pl-2"><p><strong><big><b><span class="title-window">' + appointment.title + '</span></b></big></strong><br><small><span class="title-help">' + appointment.address + '</span></small></p><p><span class="info-window"><small>Date: </small></span><b>' + new Date(appointment.date).toUTCString().split(' ', 4).join(' ') + '</b><br><span class="info-window"><small>Start time: </small></span><b>' + appointment.starttime.slice(0, 5) + '</b><br><span class="info-window"><small>End time: </small></span><b>' + appointment.endtime.slice(0, 5) + '</b></p><small><p><span class="info-window">Notes: </span><span class="notes ml-2">' + appointment.notes + '</span></p></small></div>'
             }
+        });
 
-            geocoder.geocode( { 'address': address}, function(results, status) {
+        if(!appointmentMarker) {
+
+            icon = {
+                url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(25, 25)
+            }; 
+
+            infocontents = '<form id="add_item_form"><div class="form-group"><input id="id" class="form-control" type="hidden" value="' + restaurant.id + '"></div><div class="form-group"><label for="title">Place:</label><input id="title" class="form-control" type="text" area-describedby="titleHelp" placeholder="' + restaurant.title + '"  value="' + restaurant.title + '" minlength="2" readonly></div><div class="form-group"><label for="address">Address:</label><input id="address" class="form-control" type="text" area-describedby="addressHelp" placeholder="' + restaurant.address + '"  value="' + restaurant.address + '" minlength="2" readonly></div><div class="form-group"><label for="date">Date:</label><input id="date" class="form-control" type="text" aria-describedby="dateHelp" placeholder="yyyy-mm-dd" required><small id="dateHelp" class="form-text text-muted">Please enter the date in the specified format.</small></div><div class="form-group"><label for="starttime">Start time:</label><input id="starttime" class="form-control time" type="time" aria-describedby="starttimeHelp" placeholder="hh:mm" required><small id="starttimeHelp" class="form-text text-muted">Please enter the start time in the specified format.</small></div><div class="form-group"><label for="endtime">End time:</label><input id="endtime" class="form-control time" type="time" aria-describedby="endtimeHelp" placeholder="hh:mm" required><small id="endtimeHelp" class="form-text text-muted">Please enter the end time in the specified format.</small></div><div class="form-group"><label for="textareaNotes">Notes:</label><textarea class="form-control" id="textareaNotes" rows="3"></textarea></div><input id="submit" type="submit" class="btn btn-secondary mb-5" value="Submit"></form>'
+
+        }
+
+        geocoder.geocode( { 'address': address}, function(results, status) {
 
             if (status == 'OK') {
 
@@ -210,32 +210,32 @@ function initMarkers() {
 
                     infowindow.setContent(infocontents);
 
-                    console.log(_.isEqual(restaurant.position, marker.position))
+                    google.maps.event.addListener(infowindow, 'domready', function() {
 
-                            google.maps.event.addListener(infowindow, 'domready', function() {
+                        // Bind the click event on your button here
 
-                            // Bind the click event on your button here
+                        $('#submit').on('click', function(e){
 
-                                $('#submit').on('click', function(e){
+                            e.preventDefault();
 
-                                    e.preventDefault();
+                            var id = $('input#id').val()
+                            var title = $('input#title').val()
+                            var date = $('input#date').val()
+                            var starttime = $('input#starttime').val()
+                            var endtime = $('input#endtime').val()
+                            var notes = $.trim($('textarea#textareaNotes').val()).replace(/\"/g, "\\\"")
+                            var address =  restaurant.address
+                            var position = restaurant.position
 
-                                    var id = $('input#id').val()
-                                    var title = $('input#title').val()
-                                    var date = $('input#date').val()
-                                    var starttime = $('input#starttime').val()
-                                    var endtime = $('input#endtime').val()
-                                    var notes = $.trim($('textarea#textareaNotes').val()).replace(/\"/g, "\\\"")
-                                    var address =  restaurant.address
-                                    var position = restaurant.position
-
-                                    var newItem = jQuery.parseJSON( '{ "id": "' + id + '", "title": "' + title + '", "date": "' + date + '", "starttime": "' + starttime + '",  "endtime": "' + endtime + '", "notes": "' + notes + '", "address": "' + address + '", "position": "' + position + '" }')
+                            var newItem = jQuery.parseJSON( '{ "id": "' + id + '", "title": "' + title + '", "date": "' + date + '", "starttime": "' + starttime + '",  "endtime": "' + endtime + '", "notes": "' + notes + '", "address": "' + address + '", "position": "' + position + '" }')
                         
-                                    search(newItem, true)
-                                });
-                            });
+                            search(newItem, true)
+                            alertEventCreated(title);
+                        });
+                    });
 
                     infowindow.open(map, this);
+
                 });
             } 
             else {
@@ -260,6 +260,9 @@ function setIconColor(restaurant, color) {
 
 }
 
+function alertEventCreated(title) {
+    alert("Your event at " + title + " was created. Check it out on the map!")
+}
 
 
 $(document).ready(function(){
