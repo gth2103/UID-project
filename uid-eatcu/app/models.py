@@ -26,6 +26,7 @@ def load_user(user_id):
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), index=True, nullable=False)
     place_id = db.Column(db.Integer, nullable=False)
     title = db.Column(db.String(32), nullable=False)
     date = db.Column(db.Date, index=True, nullable=False)
@@ -34,6 +35,8 @@ class Event(db.Model):
     notes = db.Column(db.Text)
     position = db.Column(db.Text)
     address = db.Column(db.String(50))
+    user = db.relationship("User", foreign_keys=[user_id], backref=db.backref("events", cascade="all,delete"))
+
     
 
     def serialize(self):
@@ -46,7 +49,9 @@ class Event(db.Model):
             'end_time': self.end_time,
             'notes': self.notes,
             'address': self.address,
-            'position': self.position    
+            'position': self.position,
+            'user_id': self.user_id
+    
         }
 
 class UserEvent(db.Model):

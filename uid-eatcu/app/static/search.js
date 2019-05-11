@@ -62,6 +62,11 @@ function initMap() {
         }
     });
 
+    pending.forEach(function(pendingEvent){
+        restaurants.push(pendingEvent)
+    });
+
+
     appointments.forEach(function(appointment){
         restaurants.push(appointment)
     });
@@ -156,10 +161,13 @@ function initMarkers() {
 
         var appointmentMarker = false;
 
+        var pendingMarker = false;
+
         var infocontents;
 
         var icon;
 
+        console.log(restaurants)
 
         appointments.forEach(function(appointment) {
 
@@ -180,7 +188,26 @@ function initMarkers() {
             }
         });
 
-        if(!appointmentMarker) {
+        pending.forEach(function(pendingEvent) {
+
+            if (_.isEqual(pendingEvent.address, restaurant.address) && !appointmentMarker) {
+
+                pendingMarker = true;
+
+                icon = {
+                    url: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
+                    size: new google.maps.Size(71, 71),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point(17, 34),
+                    scaledSize: new google.maps.Size(25, 25)
+                };
+
+
+                infocontents = '<br><div class="pl-2"><p><strong><big><b><span class="title-window"><i> Invitation pending to: ' + pendingEvent.title + '</i></span></b></big></strong><br><small><span class="title-help">' + pendingEvent.address + '</span></small></p><p><span class="info-window"><small>Date: </small></span><b>' + new Date(pendingEvent.date).toUTCString().split(' ', 4).join(' ') + '</b><br><span class="info-window"><small>Start time: </small></span><b>' + pendingEvent.starttime.slice(0, 5) + '</b><br><span class="info-window"><small>End time: </small></span><b>' + pendingEvent.endtime.slice(0, 5) + '</b></p><small><p><span class="info-window">Notes: </span><span class="notes ml-2">' + pendingEvent.notes + '</span></p></small></div>'
+            }
+        });
+
+        if(!appointmentMarker && !pendingMarker) {
 
             icon = {
                 url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",

@@ -16,6 +16,8 @@ users =  []
 
 invites =  []
 
+pending = []
+
 
 restaurants_index = len(restaurants)
 
@@ -25,6 +27,7 @@ invites_index = len(invites)
 
 users_index = len(users)
 
+pending_index =  len(pending)
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
@@ -67,14 +70,40 @@ def register():
 def search():
     global restaurants
     global appointments
+    global pending
     global restaurants_index
     global appointments_index
+    global pending_index
 
     appointment = request.args.get('appointment')
 
-    appointments = [];
+    appointments = []
+
+    pending = []
+
+    pendingEvents =  get_pending_events(current_user.id)
 
     events = get_recent_events(current_user.id)
+
+
+    for pendingEvent in pendingEvents:
+        new_pending_entry = {
+            "id": pendingEvent.id,
+            "place_id": pendingEvent.place_id,
+            "title": pendingEvent.title,
+            "address": pendingEvent.address,
+            "date": str(pendingEvent.date),
+            "starttime": str(pendingEvent.start_time.time()),
+            "endtime": str(pendingEvent.end_time.time()),
+            "notes": pendingEvent.notes,
+            "position": pendingEvent.position,
+            "user_id": pendingEvent.user_id
+        }
+
+        pending.append(new_pending_entry)
+        restaurants.append(new_pending_entry)
+        pending_index += 1
+        restaurants_index += 1
 
     for event in events:
         new_item_entry = {
@@ -86,11 +115,17 @@ def search():
             "starttime": str(event.start_time.time()),
             "endtime": str(event.end_time.time()),
             "notes": event.notes,
-            "position": event.position
+            "position": event.position,
+            "user_id": event.user_id
         }
 
         appointments.append(new_item_entry)
         appointments_index += 1
+
+
+    print(appointments)
+    print(pending)
+    print(restaurants)
 
     if request.method == 'POST':
 
@@ -134,7 +169,7 @@ def search():
                 return datetime.strptime(s, '%H:%M') 
 
             
-            event = Event(place_id=str(id), title=str(title), address=str(address[0]), date=convertDate(str(date[0])), start_time=convertTime(str(starttime[0])), end_time=convertTime(str(endtime[0])), notes=str(notes), position=str(position))
+            event = Event(user_id = current_user.id, place_id=str(id), title=str(title), address=str(address[0]), date=convertDate(str(date[0])), start_time=convertTime(str(starttime[0])), end_time=convertTime(str(endtime[0])), notes=str(notes), position=str(position))
             add_event(event)
             add_user_event(event, current_user)
 
@@ -149,7 +184,8 @@ def search():
                     "starttime": str(event.start_time.time()),
                     "endtime": str(event.end_time.time()),
                     "notes": event.notes,
-                    "position": event.position
+                    "position": event.position,
+                    "user_id": current_user.id
                 }
 
                 if new_item_entry not in appointments:
@@ -158,7 +194,7 @@ def search():
 
             return jsonify(restaurants = restaurants, appointments = appointments)       
     else:
-        return render_template('search.html', appointments = appointments, restaurants = restaurants, restaurants_index = restaurants_index, appointments_index = appointments_index)
+        return render_template('search.html', appointments = appointments, restaurants = restaurants, restaurants_index = restaurants_index, appointments_index = appointments_index, pending =  pending)
 
 @app.route('/item', methods=['GET', 'POST'])
 @login_required
@@ -166,29 +202,43 @@ def item():
     global appointments
     global users
     global invites
+    global pending
     global users_index
     global invites_index
+    username = current_user.username
+
+    users =  []
+    invites =  []
 
     all_users = User.query.all()
     invited = UserEvent.query.all()
 
     for user in all_users:
-        users.append(user.username)
-        users_index += 1
+        if user not in users:
+            users.append(user.username)
+            users_index += 1
 
     for invitee in invited:
-        if invitee.user_id != current_user.id:
+        event = get_event(invitee.event_id)
+        new_invtee_entry = {}
+        if(invitee.user_id == event.user_id) :
+            new_invtee_entry = {
+                "username": invitee.user.username + " creator",
+                "event_id": invitee.event_id,
+                "accepted": invitee.accepted
+            }
+        else:
             new_invtee_entry = {
                 "username": invitee.user.username,
                 "event_id": invitee.event_id,
                 "accepted": invitee.accepted
             }
-
-            if new_invtee_entry not in invites:
-                invites.append(new_invtee_entry)
-                invites_index += 1
+        
+        if new_invtee_entry not in invites:
+            invites.append(new_invtee_entry)
+            invites_index += 1
     
-    return render_template('item.html',title='Appointments', users=users, appointments = appointments,invites = invites);
+    return render_template('item.html',title='Appointments', users=users, appointments = appointments,invites = invites,  pending = pending, username=username);
 
 @app.route('/remove_event/<event_id>', methods=['POST'])
 @login_required
@@ -216,7 +266,8 @@ def remove_event(event_id):
             "starttime": str(event.start_time.time()),
             "endtime": str(event.end_time.time()),
             "notes": event.notes,
-            "position": event.position
+            "position": event.position,
+            "user_id":  event.user_id
         }
 
         appointments.append(new_item_entry)
