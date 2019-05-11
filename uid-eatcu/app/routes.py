@@ -206,6 +206,7 @@ def item():
     global users_index
     global invites_index
     username = current_user.username
+    user_id = current_user.id
 
     users =  []
     invites =  []
@@ -238,7 +239,7 @@ def item():
             invites.append(new_invtee_entry)
             invites_index += 1
     
-    return render_template('item.html',title='Appointments', users=users, appointments = appointments,invites = invites,  pending = pending, username=username);
+    return render_template('item.html',title='Appointments', users=users, appointments = appointments,invites = invites,  pending = pending, username=username, user_id=user_id);
 
 @app.route('/remove_event/<event_id>', methods=['POST'])
 @login_required
