@@ -177,10 +177,10 @@ function initMarkers() {
 
                 icon = {
                     url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
-                    size: new google.maps.Size(71, 71),
+                    size: new google.maps.Size(80, 80),
                     origin: new google.maps.Point(0, 0),
                     anchor: new google.maps.Point(17, 34),
-                    scaledSize: new google.maps.Size(25, 25)
+                    scaledSize: new google.maps.Size(32, 32)
                 };
 
 
@@ -196,10 +196,10 @@ function initMarkers() {
 
                 icon = {
                     url: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
-                    size: new google.maps.Size(71, 71),
+                    size: new google.maps.Size(80, 80),
                     origin: new google.maps.Point(0, 0),
                     anchor: new google.maps.Point(17, 34),
-                    scaledSize: new google.maps.Size(25, 25)
+                    scaledSize: new google.maps.Size(32, 32)
                 };
 
 
@@ -211,10 +211,10 @@ function initMarkers() {
 
             icon = {
                 url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
-                size: new google.maps.Size(71, 71),
+                size: new google.maps.Size(80, 80),
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(17, 34),
-                scaledSize: new google.maps.Size(25, 25)
+                scaledSize: new google.maps.Size(32, 32)
             }; 
 
             infocontents = '<form id="add_item_form"><div class="form-group"><input id="id" class="form-control" type="hidden" value="' + restaurant.id + '"></div><div class="form-group"><label for="title">Place:</label><input id="title" class="form-control" type="text" area-describedby="titleHelp" placeholder="' + restaurant.title + '"  value="' + restaurant.title + '" minlength="2" readonly></div><div class="form-group"><label for="address">Address:</label><input id="address" class="form-control" type="text" area-describedby="addressHelp" placeholder="' + restaurant.address + '"  value="' + restaurant.address + '" minlength="2" readonly></div><div class="form-group"><label for="date">Date:</label><input id="date" class="form-control" type="text" aria-describedby="dateHelp" placeholder="yyyy-mm-dd" required><small id="dateHelp" class="form-text text-muted">Please enter the date in the specified format.</small></div><div class="form-group"><label for="starttime">Start time:</label><input id="starttime" class="form-control time" type="time" aria-describedby="starttimeHelp" placeholder="hh:mm" required><small id="starttimeHelp" class="form-text text-muted">Please enter the start time in the specified format.</small></div><div class="form-group"><label for="endtime">End time:</label><input id="endtime" class="form-control time" type="time" aria-describedby="endtimeHelp" placeholder="hh:mm" required><small id="endtimeHelp" class="form-text text-muted">Please enter the end time in the specified format.</small></div><div class="form-group"><label for="textareaNotes">Notes:</label><textarea class="form-control" id="textareaNotes" rows="3"></textarea></div><input id="submit" type="submit" class="btn btn-secondary mb-5" value="Submit"></form>'
@@ -278,10 +278,10 @@ function setIconColor(restaurant, color) {
 
     icon = {
         url: "http://maps.google.com/mapfiles/ms/icons/" +color + "-dot.png",
-        size: new google.maps.Size(71, 71),
+        size: new google.maps.Size(80, 80),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25)
+        scaledSize: new google.maps.Size(32, 32)
     };
 
 

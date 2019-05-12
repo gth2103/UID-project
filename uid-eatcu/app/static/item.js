@@ -82,6 +82,7 @@ function getInvites(event_key, event_user_id) {
         format(name, event_key)
         hoverX(name, event_key)
         hoverUser(name, event_key)
+        deleteInvite(name, event_key)
     });
 }
 
@@ -91,6 +92,10 @@ var searchbar = '<form class="form-inline"><div class="input-group"><div class="
 
 function alertDeleted() {
     alert("Your event was deleted.")
+}
+
+function alertDeletedInvitation() {
+    alert("Your invitation was deleted.")
 }
 
 function alertInvited(username) {
@@ -132,25 +137,44 @@ function format(name, event_key){
     $('a.' + name + '.' + event_key).css('visibility','hidden')
 }
 
+
+function deleteInvite(name, event_key){
+    $('a.' + name + '.' + event_key).on('click', function(e) {
+
+        e.preventDefault()
+
+        if (window.confirm("Are you sure you want to delete this invition?")) {
+
+            var url = "/remove_invitation/" + event_key + "/" + name
+
+            $.post(url);
+            alertDeletedInvitation();
+            setTimeout(function(){
+                location.reload(1);
+            }, 800);
+        }       
+    });
+}
+
+
 $(document).ready(function(){
 
     get_appointments();
 
     $('.delete').on('click', function() {
 
-   if (window.confirm("Are you sure you want to delete this event?")) {
+        if (window.confirm("Are you sure you want to delete this event?")) {
 
-        var event_key = $(this).attr('accesskey');
-        var url = "/remove_event/" + event_key;
-        var target = '.' + event_key;
+            var event_key = $(this).attr('accesskey');
+            var url = "/remove_event/" + event_key;
+            var target = '.' + event_key;
 
-        $.post(url);
-        alertDeleted();
-        setTimeout(function(){
-            location.reload(1);
-        }, 800);
-     }
-        
+            $.post(url);
+            alertDeleted();
+            setTimeout(function(){
+                location.reload(1);
+            }, 800);
+        }       
     });
 
     $('.invite-people-img').on('click',  function(){
@@ -173,13 +197,15 @@ $(document).ready(function(){
         $('.searchbar-input').on('keydown', function( e ) {
             if ( e.which == 13) {
 
+                var currentUserEvent  = false;
 
                 appointments.forEach(function(appointment){
 
                     var event_key  = $('.searchbar-input').parent().parent().parent().attr('accesskey')
 
-
                     if(event_key == appointment.id && user_id == appointment.user_id) {
+
+                        currentUserEvent = true;
 
                         var alreadyInvited = false;
 
@@ -214,12 +240,31 @@ $(document).ready(function(){
                             alertNotFound(username)
                         }
                     }
-                    else {
-                        alertNotAuthorized()
-                    }
                 });
+
+                if (!currentUserEvent){
+                    alertNotAuthorized()
+                }
             }
         });
     });
+
+   $('.delete').on('click', function() {
+
+        if (window.confirm("Are you sure you want to delete this event?")) {
+
+            var event_key = $(this).attr('accesskey');
+            var url = "/remove_event/" + event_key;
+            var target = '.' + event_key;
+
+            $.post(url);
+            alertDeleted();
+            setTimeout(function(){
+                location.reload(1);
+            }, 800);
+        }       
+    });
+
+
 
 });

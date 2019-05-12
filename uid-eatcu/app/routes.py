@@ -8,15 +8,15 @@ from app.events import *
 from flask_login import current_user, login_user, logout_user, login_required
 from flask_mail import Message
 
-restaurants = []
+restaurants = [] # accepted and unaccepted events
 
-appointments = []
+appointments = [] # accepted events
 
-users =  []
+users =  [] # all_users
 
-invites =  []
+invites =  [] # accepted and unaccepted userEvents
 
-pending = []
+pending = [] # unaccepted userEvents
 
 
 restaurants_index = len(restaurants)
@@ -101,9 +101,7 @@ def search():
         }
 
         pending.append(new_pending_entry)
-        restaurants.append(new_pending_entry)
         pending_index += 1
-        restaurants_index += 1
 
     for event in events:
         new_item_entry = {
@@ -246,8 +244,6 @@ def item():
 def remove_event(event_id):
     global appointments
     global appointments_index
-    user = current_user
-    form = EmailForm()
     event = Event.query.filter_by(id=event_id).first()
     print(event)
     db.session.delete(event)
@@ -274,6 +270,38 @@ def remove_event(event_id):
         appointments.append(new_item_entry)
 
         appointments_index += 1
+    return redirect(url_for('item'));
+
+@app.route('/remove_invitation/<event_id>/<username>', methods=['POST'])
+@login_required
+def remove_invitation(event_id, username):
+    global pending
+    global pending_index
+    global invites
+    global invites_index
+    user = User.query.filter_by(username=username).first()
+    delete_user_event(event_id, user.id)
+
+    pending = []
+
+    pendingEvents = get_pending_events(current_user.id)
+
+    for pendingEvent in pendingEvents:
+        new_pending_entry = {
+            "id": pendingEvent.id,
+            "place_id": pendingEvent.place_id,
+            "title": pendingEvent.title,
+            "address": pendingEvent.address,
+            "date": str(pendingEvent.date),
+            "starttime": str(pendingEvent.start_time.time()),
+            "endtime": str(pendingEvent.end_time.time()),
+            "notes": pendingEvent.notes,
+            "position": pendingEvent.position,
+            "user_id": pendingEvent.user_id
+        }
+
+        pending.append(new_pending_entry)
+        pending_index += 1
     return redirect(url_for('item'));
 
 

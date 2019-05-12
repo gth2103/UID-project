@@ -41,3 +41,20 @@ def send_invite(event, current_user, user):
 	db.session.add(event_invitation)
 	db.session.commit()
 
+def get_user_event(event_id):
+	event = db.session.query(UserEvent).filter(UserEvent.event_id == event_id).first()
+	return event
+
+def accept_user_event(event_id):
+	event = db.session.query(UserEvent).filter(UserEvent.event_id == event_id).first()
+	event.accepted  = 1;
+	db.session.commit()
+
+def delete_user_event(event_id, user_id):
+	event = db.session.query(UserEvent).filter(UserEvent.event_id == event_id, UserEvent.user_id == user_id).first()
+	print(event)
+	db.session.delete(event)
+	db.session.commit()
+
+
+
