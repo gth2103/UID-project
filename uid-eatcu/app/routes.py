@@ -29,6 +29,7 @@ users_index = len(users)
 
 pending_index =  len(pending)
 
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -75,16 +76,9 @@ def search():
     global appointments_index
     global pending_index
 
-    appointment = request.args.get('appointment')
-
-    appointments = []
-
     pending = []
 
     pendingEvents =  get_pending_events(current_user.id)
-
-    events = get_recent_events(current_user.id)
-
 
     for pendingEvent in pendingEvents:
         new_pending_entry = {
@@ -103,6 +97,11 @@ def search():
         pending.append(new_pending_entry)
         pending_index += 1
 
+
+    appointments = []
+
+    events = get_recent_events(current_user.id)
+
     for event in events:
         new_item_entry = {
             "id": event.id,
@@ -120,10 +119,7 @@ def search():
         appointments.append(new_item_entry)
         appointments_index += 1
 
-
-    print(appointments)
-    print(pending)
-    print(restaurants)
+    appointment = request.args.get('appointment')
 
     if request.method == 'POST':
 
@@ -194,6 +190,8 @@ def search():
     else:
         return render_template('search.html', appointments = appointments, restaurants = restaurants, restaurants_index = restaurants_index, appointments_index = appointments_index, pending =  pending)
 
+
+
 @app.route('/item', methods=['GET', 'POST'])
 @login_required
 def item():
@@ -237,17 +235,14 @@ def item():
             invites.append(new_invtee_entry)
             invites_index += 1
     
-    return render_template('item.html',title='Appointments', users=users, appointments = appointments,invites = invites,  pending = pending, username=username, user_id=user_id);
+    return render_template('item.html',title='Appointments', users=users, appointments = appointments, invites = invites,  pending = pending, username=username, user_id=user_id);
 
 @app.route('/remove_event/<event_id>', methods=['POST'])
 @login_required
 def remove_event(event_id):
     global appointments
     global appointments_index
-    event = Event.query.filter_by(id=event_id).first()
-    print(event)
-    db.session.delete(event)
-    db.session.commit()
+    remove_event(event_id)
 
     appointments = [];
 
@@ -267,18 +262,16 @@ def remove_event(event_id):
             "user_id":  event.user_id
         }
 
-        appointments.append(new_item_entry)
-
-        appointments_index += 1
-    return redirect(url_for('item'));
+        if new_item_entry not in appointments:
+            appointments.append(new_item_entry)
+            appointments_index += 1
+    return redirect(url_for('search'));
 
 @app.route('/remove_invitation/<event_id>/<username>', methods=['POST'])
 @login_required
 def remove_invitation(event_id, username):
     global pending
     global pending_index
-    global invites
-    global invites_index
     user = User.query.filter_by(username=username).first()
     delete_user_event(event_id, user.id)
 
@@ -299,10 +292,66 @@ def remove_invitation(event_id, username):
             "position": pendingEvent.position,
             "user_id": pendingEvent.user_id
         }
+        if new_pending_entry not in pending:
+            pending.append(new_pending_entry)
+            pending_index += 1
+    return redirect(url_for('search'));
 
-        pending.append(new_pending_entry)
-        pending_index += 1
-    return redirect(url_for('item'));
+@app.route('/accept_invitation/<event_id>/<username>', methods=['POST'])
+@login_required
+def accept_invitation(event_id, username):
+    global pending
+    global pending_index
+    global appointments
+    global appointments_index
+    user = User.query.filter_by(username=username).first()
+    accept_user_event(event_id, user.id)
+
+    pending = []
+
+    pendingEvents = get_pending_events(current_user.id)
+
+    for pendingEvent in pendingEvents:
+        new_pending_entry = {
+            "id": pendingEvent.id,
+            "place_id": pendingEvent.place_id,
+            "title": pendingEvent.title,
+            "address": pendingEvent.address,
+            "date": str(pendingEvent.date),
+            "starttime": str(pendingEvent.start_time.time()),
+            "endtime": str(pendingEvent.end_time.time()),
+            "notes": pendingEvent.notes,
+            "position": pendingEvent.position,
+            "user_id": pendingEvent.user_id
+        }
+
+        if new_pending_entry not in pending:
+            pending.append(new_pending_entry)
+            pending_index += 1
+
+    appointments = []
+
+    events = get_recent_events(current_user.id)
+
+    for event in events:
+        new_item_entry = {
+            "id": event.place_id,
+            "title": event.title,
+            "address": event.address,
+            "date": str(event.date),
+            "starttime": str(event.start_time.time()),
+            "endtime": str(event.end_time.time()),
+            "notes": event.notes,
+            "position": event.position,
+            "user_id": current_user.id
+        }
+
+        if new_item_entry not in appointments:
+            appointments.append(new_item_entry)
+            appointments_index += 1
+
+    return redirect(url_for('search'));
+
 
 
 @app.route('/invite_people/<event_id>/<username>', methods=['POST'])
@@ -315,36 +364,7 @@ def invite_people(event_id, username):
     print(user)
     print(current_user)
     send_invite(event, current_user, user)
-    return redirect(url_for('item'));
-
-
-
-@app.route("/accept_invitation/<user_event_id>/", methods=['POST'])
-@login_required
-def accept_invitation(user_event_id):
-    user_event = UserEvent.query.filter_by(id=user_event_id).first()
-    user_event.accepted = True
-    db.session.add(user_event)
-    sent_invitation, received_invitation = get_event_invitation(user_event.event_id, current_user.id)
-    remove_notification(received_invitation.receiver.id, user_event.event.id)
-    create_accept_notification(user_event, received_invitation.sender.id)
-    db.session.delete(received_invitation)
-    db.session.commit()
-    return jsonify(["Invitation accepted.", [{"user_event": u_e.serialize(), "user": u_e.user.serialize()} for u_e in user_event.event.user_events]])
-
-
-@app.route("/decline_invitation/<user_event_id>/", methods=['POST'])
-@login_required
-def decline_invitation(user_event_id):
-    user_event = UserEvent.query.filter_by(id=user_event_id).first()
-    sent_invitation, received_invitation = get_event_invitation(user_event.event_id, current_user.id)
-    remove_notification(received_invitation.receiver.id, user_event.event.id)
-    create_decline_notification(user_event, received_invitation.sender.id)
-    db.session.delete(user_event)
-    db.session.delete(received_invitation)
-    db.session.commit()
-    flash('Invitation declined.')
-    return redirect(url_for('event_new'))
+    return redirect(url_for('search'));
 
 
 if __name__ == '__main__':

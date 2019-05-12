@@ -62,27 +62,32 @@ function getInvites(event_key, event_user_id) {
 
         if(event_key === invite.event_id) { 
             if(invite.accepted) {// @TODO: if invite.accepted = 1
-                if (!(username === name) && event_user_id ===  user_id) { // accepted & (yours or your event)
-                    $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><small>" +  invite.username + "</small><a class='" + name + " " + event_key + " float-right mr-4' href='#'>&times;</a><br></span><div class='clearfix'></div>"); 
+                if (!(username === name) && event_user_id ===  user_id) { // accepted (not yours but your event)
+                    $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><small>" +  invite.username + "</small><a class='" + name + " " + event_key + " delete-invite float-right mr-4' href='#'>&times;</a><br></span><div class='clearfix'></div>");
+                    applyFeatures(name, event_key)
+                }
+                else if ((username === name) && !(event_user_id ===  user_id)) { // accepted (yours but not your event)
+                    $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><small>" +  invite.username + "</small><a class='" + name + " " + event_key + " delete-invite float-right mr-4' href='#'>&times;</a><br></span><div class='clearfix'></div>");
+                    applyFeatures(name, event_key)
                 }
                 else {
                     $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><small>" +  invite.username + "</small><br></span><div class='clearfix'></div>");
+                    applyFeatures(name, event_key)
                 }
             }
             else if (username === name){ // pending & (yours)
-                $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><span class='pending'><small><i>" +  invite.username + "&nbsp;pending&nbsp;&nbsp;&nbsp;<strong><a class='" + name + "' href='#'>click here to accept</a></strong></i></small></span><a class='" + name + " " + event_key + " float-right mr-4' href='#'>&times;</a><br></span><div class='clearfix'></div>");    
+                $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><span class='pending'><small><i>" +  invite.username + "&nbsp;pending&nbsp;&nbsp;&nbsp;<strong><a class='" + name + " " + event_key + " accept' href='#'>click here to accept</a></strong></i></small></span><a class='" + name + " " + event_key + " delete-invite float-right mr-4' href='#'>&times;</a><br></span><div class='clearfix'></div>"); 
+                applyFeatures(name, event_key)   
             }
              else if (event_user_id ===  user_id){ // pending & (your event but not yours)
-                $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><span class='pending'><small><i>" +  invite.username + "&nbsp;pending</i></small></span><a class='" + name + " " + event_key + " float-right mr-4' href='#'>&times;</a><br></span><div class='clearfix'></div>");    
+                $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><span class='pending'><small><i>" +  invite.username + "&nbsp;pending</i></small></span><a class='" + name + " " + event_key + " delete-invite float-right mr-4' href='#'>&times;</a><br></span><div class='clearfix'></div>");
+                applyFeatures(name, event_key)   
             }
             else {
                 $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><span class='pending'><small><i>" +  invite.username + "&nbsp;pending</i></small></span><br></span><div class='clearfix'></div>");
+                applyFeatures(name, event_key)
             }
         }
-        format(name, event_key)
-        hoverX(name, event_key)
-        hoverUser(name, event_key)
-        deleteInvite(name, event_key)
     });
 }
 
@@ -96,6 +101,10 @@ function alertDeleted() {
 
 function alertDeletedInvitation() {
     alert("Your invitation was deleted.")
+}
+
+function alertAcceptedInvitation() {
+    alert("Your invitation was accepted.")
 }
 
 function alertInvited(username) {
@@ -116,7 +125,7 @@ function alertNotAuthorized() {
 
 function hoverX(name, event_key){
 
-    $('a.' + name + '.' + event_key).hover(function() {
+    $('a.' + name + '.' + event_key + '.delete-invite').hover(function() {
         $('span.' + name + '.' + event_key).addClass('rgba-teal-slight')
     }, function() {
         $('span.' + name + '.' + event_key).removeClass('rgba-teal-slight')
@@ -126,20 +135,20 @@ function hoverX(name, event_key){
 function hoverUser(name, event_key){
 
     $('div[accesskey|="' +  event_key + '"].invited').hover(function() {
-        $('a.' + name + '.' + event_key).css('visibility','visible')
+        $('a.' + name + '.' + event_key + '.delete-invite').css('visibility','visible')
     }, function() {
-        $('a.' + name + '.' + event_key).css('visibility','hidden')
+        $('a.' + name + '.' + event_key + '.delete-invite').css('visibility','hidden')
     });
 }
 
 function format(name, event_key){
     $('span.' + name + '.' + event_key).addClass('p-1 pl-2 pr-2')
-    $('a.' + name + '.' + event_key).css('visibility','hidden')
+    $('a.' + name + '.' + event_key  + '.delete-invite').css('visibility','hidden')
 }
 
 
 function deleteInvite(name, event_key){
-    $('a.' + name + '.' + event_key).on('click', function(e) {
+    $('a.' + name + '.' + event_key  + '.delete-invite').on('click', function(e) {
 
         e.preventDefault()
 
@@ -156,6 +165,30 @@ function deleteInvite(name, event_key){
     });
 }
 
+
+function applyFeatures(name, event_key){
+    format(name, event_key)
+    hoverX(name, event_key)
+    hoverUser(name, event_key)
+    deleteInvite(name, event_key)
+    acceptInvite(name, event_key)
+}
+
+
+function acceptInvite(name, event_key){
+    $('a.' + name + '.' + event_key  + '.accept').on('click', function(e) {
+
+        e.preventDefault()
+
+            var url = "/accept_invitation/" + event_key + "/" + name
+
+            $.post(url);
+            alertAcceptedInvitation();
+            setTimeout(function(){
+                location.reload(1);
+            }, 800);       
+    });
+}
 
 $(document).ready(function(){
 
@@ -248,23 +281,4 @@ $(document).ready(function(){
             }
         });
     });
-
-   $('.delete').on('click', function() {
-
-        if (window.confirm("Are you sure you want to delete this event?")) {
-
-            var event_key = $(this).attr('accesskey');
-            var url = "/remove_event/" + event_key;
-            var target = '.' + event_key;
-
-            $.post(url);
-            alertDeleted();
-            setTimeout(function(){
-                location.reload(1);
-            }, 800);
-        }       
-    });
-
-
-
 });
