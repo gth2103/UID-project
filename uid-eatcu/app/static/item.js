@@ -24,10 +24,10 @@ function get_appointments() {
         else {
 
             if  (count++ % 2 == 0) {
-                restaurant = '<br><div class="' + appointment.id + ' bg-light p-4"><p><strong><big><b><span class="title">' + appointment.title + '</span></b></big></strong><button accesskey="' + appointment.id + '" type="button" class="delete btn btn-outline-danger mt-2 ml-2 float-right">Delete</button></p><p><small>' + appointment.address + '</p></small><br><p><span class="info"><small>Date: </small></span>' + new Date(appointment.date).toUTCString().split(' ', 4).join(' ') + '</p><p><span class="info"><small>Start time: </small></span>' + appointment.starttime.slice(0, 5) + '</p><p><span class="info"><small>End time: </small></span>' + appointment.endtime.slice(0, 5) + '</p><br><small><p><span class="info">Notes: </span><br><span class="notes">' + appointment.notes + '</span></p></small><br><hr><p><span class="invite-people">Who\'s Invited?</span><img accesskey="' + appointment.id + '"  class="invite-people-img d-inline-block align-center" src="../static/images/add-icon-614x460.png" width="75" height="" alt=""></p><div accesskey="' + appointment.id + '"  class="searchbar d-block"></div><div accesskey="' + appointment.id + '" class="invited"></div></div>'
+                restaurant = '<br><div class="' + appointment.id + ' bg-light p-4"><p><strong><big><b><span class="title">' + appointment.title + '</span></b></big></strong></p><p><small>' + appointment.address + '</p></small><br><p><span class="info"><small>Date: </small></span>' + new Date(appointment.date).toUTCString().split(' ', 4).join(' ') + '</p><p><span class="info"><small>Start time: </small></span>' + appointment.starttime.slice(0, 5) + '</p><p><span class="info"><small>End time: </small></span>' + appointment.endtime.slice(0, 5) + '</p><br><small><p><span class="info">Notes: </span><br><span class="notes">' + appointment.notes + '</span></p></small><br><hr><p><span class="invite-people">Who\'s Invited?</span><img accesskey="' + appointment.id + '"  class="invite-people-img d-inline-block align-center" src="../static/images/add-icon-614x460.png" width="75" height="" alt=""></p><div accesskey="' + appointment.id + '"  class="searchbar d-block"></div><div accesskey="' + appointment.id + '" class="invited"></div></div>'
             }
             else {
-                restaurant = '<br><div class="' + appointment.id + ' bg-white p-4"><p><strong><big><b><span class="title">' + appointment.title + '</span></b></big></strong><button accesskey="' + appointment.id + '"  type="button" class="delete btn btn-outline-danger mt-2 ml-2 float-right">Delete</button></p><p><small>' + appointment.address + '</p></small><br><p><span class="info"><small>Date: </small></span>' + new Date(appointment.date).toUTCString().split(' ', 4).join(' ') + '</p><p><span class="info"><small>Start time: </small></span>' + appointment.starttime.slice(0, 5) + '</p><p><span class="info"><small>End time: </small></span>' + appointment.endtime.slice(0, 5) + '</p><br><small><p><span class="info">Notes: </span><br><span class="notes">' + appointment.notes + '</span></p></small><br><hr><p><span class="invite-people">Who\'s Invited?</span><img accesskey="' + appointment.id + '"  class="invite-people-img d-inline-block align-center" src="../static/images/add-icon-614x460.png" width="75" height="" alt=""></p><div accesskey="' + appointment.id + '"  class="searchbar d-block"></div><div  accesskey="' + appointment.id + '" class="invited"></div></div>'
+                restaurant = '<br><div class="' + appointment.id + ' bg-white p-4"><p><strong><big><b><span class="title">' + appointment.title + '</span></b></big></strong></p><p><small>' + appointment.address + '</p></small><br><p><span class="info"><small>Date: </small></span>' + new Date(appointment.date).toUTCString().split(' ', 4).join(' ') + '</p><p><span class="info"><small>Start time: </small></span>' + appointment.starttime.slice(0, 5) + '</p><p><span class="info"><small>End time: </small></span>' + appointment.endtime.slice(0, 5) + '</p><br><small><p><span class="info">Notes: </span><br><span class="notes">' + appointment.notes + '</span></p></small><br><hr><p><span class="invite-people">Who\'s Invited?</span><img accesskey="' + appointment.id + '"  class="invite-people-img d-inline-block align-center" src="../static/images/add-icon-614x460.png" width="75" height="" alt=""></p><div accesskey="' + appointment.id + '"  class="searchbar d-block"></div><div  accesskey="' + appointment.id + '" class="invited"></div></div>'
             }
         }
 
@@ -40,10 +40,10 @@ function get_appointments() {
     pending.forEach(function(appointment) {
 
         if  (count++ % 2 == 0) {
-            restaurant = '<br><div class="' + appointment.id + ' bg-light p-4"><p><strong><big><b><span class="title-pending"><i> Invitation pending to: ' + appointment.title + '</i></span></b></big></strong><button accesskey="' + appointment.id + '" type="button" class="delete btn btn-outline-danger mt-2 ml-2 float-right">Delete</button></p><p><small>' + appointment.address + '</p></small><br><p><span class="info"><small>Date: </small></span>' + new Date(appointment.date).toUTCString().split(' ', 4).join(' ') + '</p><p><span class="info"><small>Start time: </small></span>' + appointment.starttime.slice(0, 5) + '</p><p><span class="info"><small>End time: </small></span>' + appointment.endtime.slice(0, 5) + '</p><br><small><p><span class="info">Notes: </span><br><span class="notes">' + appointment.notes + '</span></p></small><br><hr><p><span class="invite-people">Who\'s Invited?</span><img accesskey="' + appointment.id + '"  class="invite-people-img d-inline-block align-center" src="../static/images/add-icon-614x460.png" width="75" height="" alt=""></p><div accesskey="' + appointment.id + '"  class="searchbar d-block"></div><div accesskey="' + appointment.id + '" class="invited"></div></div>'
+            restaurant = '<br><div class="' + appointment.id + ' bg-light p-4"><p><strong><big><b><span class="title-pending"><i> Invitation pending to: ' + appointment.title + '</i></span></b></big></strong></p><p><small>' + appointment.address + '</p></small><br><p><span class="info"><small>Date: </small></span>' + new Date(appointment.date).toUTCString().split(' ', 4).join(' ') + '</p><p><span class="info"><small>Start time: </small></span>' + appointment.starttime.slice(0, 5) + '</p><p><span class="info"><small>End time: </small></span>' + appointment.endtime.slice(0, 5) + '</p><br><small><p><span class="info">Notes: </span><br><span class="notes">' + appointment.notes + '</span></p></small><br><hr><p><span class="invite-people">Who\'s Invited?</span><img accesskey="' + appointment.id + '"  class="invite-people-img d-inline-block align-center" src="../static/images/add-icon-614x460.png" width="75" height="" alt=""></p><div accesskey="' + appointment.id + '"  class="searchbar d-block"></div><div accesskey="' + appointment.id + '" class="invited"></div></div>'
         }
         else {
-            restaurant = '<br><div class="' + appointment.id + ' bg-white p-4"><p><strong><big><b><span class="title-pending"><i> Invitation pending to: ' + appointment.title + '</i></span></b></big></strong><button accesskey="' + appointment.id + '"  type="button" class="delete btn btn-outline-danger mt-2 ml-2 float-right">Delete</button></p><p><small>' + appointment.address + '</p></small><br><p><span class="info"><small>Date: </small></span>' + new Date(appointment.date).toUTCString().split(' ', 4).join(' ') + '</p><p><span class="info"><small>Start time: </small></span>' + appointment.starttime.slice(0, 5) + '</p><p><span class="info"><small>End time: </small></span>' + appointment.endtime.slice(0, 5) + '</p><br><small><p><span class="info">Notes: </span><br><span class="notes">' + appointment.notes + '</span></p></small><br><hr><p><span class="invite-people">Who\'s Invited?</span><img accesskey="' + appointment.id + '"  class="invite-people-img d-inline-block align-center" src="../static/images/add-icon-614x460.png" width="75" height="" alt=""></p><div accesskey="' + appointment.id + '"  class="searchbar d-block"></div><div  accesskey="' + appointment.id + '" class="invited"></div></div>'
+            restaurant = '<br><div class="' + appointment.id + ' bg-white p-4"><p><strong><big><b><span class="title-pending"><i> Invitation pending to: ' + appointment.title + '</i></span></b></big></strong></p><p><small>' + appointment.address + '</p></small><br><p><span class="info"><small>Date: </small></span>' + new Date(appointment.date).toUTCString().split(' ', 4).join(' ') + '</p><p><span class="info"><small>Start time: </small></span>' + appointment.starttime.slice(0, 5) + '</p><p><span class="info"><small>End time: </small></span>' + appointment.endtime.slice(0, 5) + '</p><br><small><p><span class="info">Notes: </span><br><span class="notes">' + appointment.notes + '</span></p></small><br><hr><p><span class="invite-people">Who\'s Invited?</span><img accesskey="' + appointment.id + '"  class="invite-people-img d-inline-block align-center" src="../static/images/add-icon-614x460.png" width="75" height="" alt=""></p><div accesskey="' + appointment.id + '"  class="searchbar d-block"></div><div  accesskey="' + appointment.id + '" class="invited"></div></div>'
         }
 
         $('#appointments').append(restaurant);
@@ -62,25 +62,26 @@ function getInvites(event_key, event_user_id) {
 
         if(event_key === invite.event_id) { 
             if(invite.accepted) {// @TODO: if invite.accepted = 1
-                if (username === name || event_user_id ===  user_id) { // accepted & (yours or your event)
-                    $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><small>" +  invite.username + "</small><a class='" + name + " " + event_key + " float-right mr-3' href='#'>&times;</a><br></span><div class='clearfix'></div>"); 
+                if (!(username === name) && event_user_id ===  user_id) { // accepted & (yours or your event)
+                    $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><small>" +  invite.username + "</small><a class='" + name + " " + event_key + " float-right mr-4' href='#'>&times;</a><br></span><div class='clearfix'></div>"); 
                 }
                 else {
                     $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><small>" +  invite.username + "</small><br></span><div class='clearfix'></div>");
                 }
             }
             else if (username === name){ // pending & (yours)
-                $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><span class='pending'><small><i>" +  invite.username + "&nbsp;pending&nbsp;&nbsp;&nbsp;<strong><a class='" + name + "' href='#'>click here to accept</a></strong></i></small></span><a class='" + name + " " + event_key + " float-right mr-3' href='#'>&times;</a><br></span><div class='clearfix'></div>");    
+                $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><span class='pending'><small><i>" +  invite.username + "&nbsp;pending&nbsp;&nbsp;&nbsp;<strong><a class='" + name + "' href='#'>click here to accept</a></strong></i></small></span><a class='" + name + " " + event_key + " float-right mr-4' href='#'>&times;</a><br></span><div class='clearfix'></div>");    
             }
              else if (event_user_id ===  user_id){ // pending & (your event but not yours)
-                $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><span class='pending'><small><i>" +  invite.username + "</i></small></span><a class='" + name + " " + event_key + " float-right mr-3' href='#'>&times;</a><br></span><div class='clearfix'></div>");    
+                $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><span class='pending'><small><i>" +  invite.username + "&nbsp;pending</i></small></span><a class='" + name + " " + event_key + " float-right mr-4' href='#'>&times;</a><br></span><div class='clearfix'></div>");    
             }
             else {
                 $('div[accesskey|="' +  event_key + '"].invited').append("<span class='" + name + " " + event_key + "'><span class='pending'><small><i>" +  invite.username + "&nbsp;pending</i></small></span><br></span><div class='clearfix'></div>");
             }
         }
-        hover(name, event_key);
-        padding(name, event_key);
+        format(name, event_key)
+        hoverX(name, event_key)
+        hoverUser(name, event_key)
     });
 }
 
@@ -108,17 +109,27 @@ function alertNotAuthorized() {
     alert("You are not authorized to invite people to this event.")
 }
 
-function hover(name, event_key){
+function hoverX(name, event_key){
 
     $('a.' + name + '.' + event_key).hover(function() {
         $('span.' + name + '.' + event_key).addClass('rgba-teal-slight')
     }, function() {
-    $('span.' + name + '.' + event_key).removeClass('rgba-teal-slight');
-  });
+        $('span.' + name + '.' + event_key).removeClass('rgba-teal-slight')
+    });
 }
 
-function padding(name, event_key){
-    $('span.' + name + '.' + event_key).addClass('p-1 pl-2 pr-2');
+function hoverUser(name, event_key){
+
+    $('div[accesskey|="' +  event_key + '"].invited').hover(function() {
+        $('a.' + name + '.' + event_key).css('visibility','visible')
+    }, function() {
+        $('a.' + name + '.' + event_key).css('visibility','hidden')
+    });
+}
+
+function format(name, event_key){
+    $('span.' + name + '.' + event_key).addClass('p-1 pl-2 pr-2')
+    $('a.' + name + '.' + event_key).css('visibility','hidden')
 }
 
 $(document).ready(function(){
@@ -179,7 +190,7 @@ $(document).ready(function(){
                             user  = invite.username.split(" ");
                             name = user[0]
 
-                            if(name === username){
+                            if(name === username && event_key == invite.event_id){
 
                                 alreadyInvited = true;
 
