@@ -224,7 +224,7 @@ def item():
         new_invtee_entry = {}
         if(invitee.user_id == event.user_id) :
             new_invtee_entry = {
-                "username": invitee.user.username + " creator",
+                "username": invitee.user.username + " : host",
                 "event_id": invitee.event_id,
                 "accepted": invitee.accepted
             }
