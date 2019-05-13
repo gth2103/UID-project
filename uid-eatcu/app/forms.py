@@ -30,11 +30,6 @@ class RegistrationForm(FlaskForm):
 		if user is not None:
 			raise ValidationError('Please use a different email address.')
 
-class EmailForm(FlaskForm):
-	message = TextAreaField('Message', validators=[Length(min=0, max=1000)])
-	recipient_email = StringField('Email', validators=[DataRequired(), Email()])
-	submit = SubmitField('Email')
-
 class EventForm(FlaskForm):
 	place_id  = StringField('Place Id',validators=[DataRequired()])
 	title = StringField('Title', validators=[DataRequired()])

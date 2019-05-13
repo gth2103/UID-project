@@ -39,7 +39,9 @@ function search(newItem, appointment){
         data : JSON.stringify(item_to_add),
         success: function(result){
             console.log(result);
-            location.reload();
+            $('body').fadeOut(500, function(){
+                location.reload(1);
+            });
         },
         error: function(request, status, error){
             console.log("Error");
@@ -54,7 +56,7 @@ function initMap() {
     columbia = new google.maps.LatLng(40.8070, -73.9630);
     map = new google.maps.Map(document.getElementById('map'), {
         center: columbia,
-        zoom: 16,
+        zoom: 15,
         mapTypeId: 'roadmap',
         fullscreenControl: true,
         fullscreenControlOptions: {
@@ -111,6 +113,8 @@ function initMap() {
 
         // For each place, get the icon, name and location.
 
+        bounds = new google.maps.LatLngBounds();
+
         places.forEach(function(place) {
 
             if (!place.geometry) {
@@ -140,9 +144,16 @@ function initMap() {
 
             }
 
+            if (place.geometry.viewport) {
+              // Only geocodes have viewport.
+              bounds.union(place.geometry.viewport);
+            } else {
+              bounds.extend(place.geometry.location);
+            }
 
         });
         initMarkers(); 
+        map.fitBounds(bounds);
     });
 }
 
@@ -217,7 +228,7 @@ function initMarkers() {
                 scaledSize: new google.maps.Size(32, 32)
             }; 
 
-            infocontents = '<form id="add_item_form"><div class="form-group"><input id="id" class="form-control" type="hidden" value="' + restaurant.id + '"></div><div class="form-group"><label for="title">Place:</label><input id="title" class="form-control" type="text" area-describedby="titleHelp" placeholder="' + restaurant.title + '"  value="' + restaurant.title + '" minlength="2" readonly></div><div class="form-group"><label for="address">Address:</label><input id="address" class="form-control" type="text" area-describedby="addressHelp" placeholder="' + restaurant.address + '"  value="' + restaurant.address + '" minlength="2" readonly></div><div class="form-group"><label for="date">Date:</label><input id="date" class="form-control" type="text" aria-describedby="dateHelp" placeholder="yyyy-mm-dd" required><small id="dateHelp" class="form-text text-muted">Please enter the date in the specified format.</small></div><div class="form-group"><label for="starttime">Start time:</label><input id="starttime" class="form-control time" type="time" aria-describedby="starttimeHelp" placeholder="hh:mm" required><small id="starttimeHelp" class="form-text text-muted">Please enter the start time in the specified format.</small></div><div class="form-group"><label for="endtime">End time:</label><input id="endtime" class="form-control time" type="time" aria-describedby="endtimeHelp" placeholder="hh:mm" required><small id="endtimeHelp" class="form-text text-muted">Please enter the end time in the specified format.</small></div><div class="form-group"><label for="textareaNotes">Notes:</label><textarea class="form-control" id="textareaNotes" rows="3"></textarea></div><input id="submit" type="submit" class="btn btn-secondary mb-5" value="Submit"></form>'
+            infocontents = '<form id="add_item_form"><div class="form-group"><input id="id" class="form-control" type="hidden" value="' + restaurant.id + '"></div><div class="form-group"><label for="title">Place:</label><input id="title" class="form-control" type="text" area-describedby="titleHelp" placeholder="' + restaurant.title + '"  value="' + restaurant.title + '" minlength="2" readonly></div><div class="form-group"><label for="address">Address:</label><input id="address" class="form-control" type="text" area-describedby="addressHelp" placeholder="' + restaurant.address + '"  value="' + restaurant.address + '" minlength="2" readonly></div><div class="form-group"><label for="date">Date:</label><input id="date" class="form-control" type="text" aria-describedby="dateHelp" placeholder="yyyy-mm-dd" required><small id="dateHelp" class="form-text text-muted">Please enter the date in the specified format.</small></div><div class="form-group"><label for="starttime">Start time:</label><input id="starttime" class="form-control time" type="time" aria-describedby="starttimeHelp" placeholder="hh:mm" required><small id="starttimeHelp" class="form-text text-muted">Please enter a start time between 00:00 and 23:59.</small></div><div class="form-group"><label for="endtime">End time:</label><input id="endtime" class="form-control time" type="time" aria-describedby="endtimeHelp" placeholder="hh:mm" required><small id="endtimeHelp" class="form-text text-muted">Please enter an end time between 00:00 and 23:59.</small></div><div class="form-group"><label for="textareaNotes">Notes:</label><textarea class="form-control" id="textareaNotes" rows="3"></textarea></div><input id="submit" type="submit" class="btn btn-secondary mb-5" value="Submit"></form>'
 
         }
 
@@ -294,6 +305,7 @@ function alertEventCreated(title) {
 
 $(document).ready(function(){
 
+    $('body').fadeIn(500);
 
     $('#search-discover-input').attr("placeholder","Restaurant name or street address");
 

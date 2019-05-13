@@ -149,10 +149,10 @@ def search():
             json_data = request.get_json()
             id = json_data["id"]
             title = json_data["title"]
-            address = json_data["address"],
-            date = json_data["date"],
-            starttime = json_data["starttime"],
-            endtime = json_data["endtime"],
+            address = json_data["address"]
+            date = json_data["date"]
+            starttime = json_data["starttime"]
+            endtime = json_data["endtime"]
             notes = json_data["notes"]
             position = json_data["position"]
 
@@ -163,7 +163,7 @@ def search():
                 return datetime.strptime(s, '%H:%M') 
 
             
-            event = Event(user_id = current_user.id, place_id=str(id), title=str(title), address=str(address[0]), date=convertDate(str(date[0])), start_time=convertTime(str(starttime[0])), end_time=convertTime(str(endtime[0])), notes=str(notes), position=str(position))
+            event = Event(user_id = current_user.id, place_id=str(id), title=str(title), address=str(address), date=convertDate(str(date)), start_time=convertTime(str(starttime)), end_time=convertTime(str(endtime)), notes=str(notes), position=str(position))
             add_event(event)
             add_user_event(event, current_user)
 
@@ -266,6 +266,57 @@ def remove_event(event_id):
             appointments.append(new_item_entry)
             appointments_index += 1
     return redirect(url_for('search'));
+
+
+@app.route('/update_event/<event_id>', methods=['POST'])
+@login_required
+def update_event(event_id):
+    global appointments
+    global appointments_index
+
+    json_data = request.get_json()
+
+    date = json_data["date"]
+    starttime = json_data["starttime"]
+    endtime = json_data["endtime"]
+    notes = json_data["notes"]
+
+
+    def convertDate(s):
+        return datetime.strptime(s, '%Y-%m-%d')    
+
+    def convertTime(s):
+        return datetime.strptime(s, '%H:%M') 
+
+
+    update_db_event(event_id, convertDate(str(date)), convertTime(str(starttime)), convertTime(str(endtime)), str(notes))
+
+    new_event = get_event(event_id)
+    print(new_event.start_time)
+
+    appointments = [];
+
+    events = get_recent_events(current_user.id)
+
+    for event in events:
+        new_item_entry = {
+            "id": event.id,
+            "place_id": event.place_id,
+            "title": event.title,
+            "address": event.address,
+            "date": str(event.date),
+            "starttime": str(event.start_time.time()),
+            "endtime": str(event.end_time.time()),
+            "notes": event.notes,
+            "position": event.position,
+            "user_id":  event.user_id
+        }
+
+        if new_item_entry not in appointments:
+            appointments.append(new_item_entry)
+            appointments_index += 1
+    return redirect(url_for('search'));
+
 
 @app.route('/remove_invitation/<event_id>/<username>', methods=['POST'])
 @login_required

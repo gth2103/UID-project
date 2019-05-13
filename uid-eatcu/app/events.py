@@ -36,6 +36,14 @@ def remove_event(event_id):
 	db.session.delete(event)
 	db.session.commit()
 
+def update_db_event(event_id, date, start_time, end_time, notes):
+	event = Event.query.filter_by(id=event_id).first()
+	event.date =  date
+	event.start_time = start_time
+	event.end_time = end_time 
+	event.notes  = notes
+	db.session.commit()
+
 
 def send_invite(event, current_user, user):
 	sender = UserEvent(user_id=current_user.id, event_id=event.id, accepted=True)
