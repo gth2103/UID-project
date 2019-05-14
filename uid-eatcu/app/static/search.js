@@ -38,12 +38,14 @@ function search(newItem, appointment){
         contentType: "application/json; charset=utf-8",
         data : JSON.stringify(item_to_add),
         success: function(result){
+            alertEventCreated(item_to_add.title);
             console.log(result);
             $('body').fadeOut(500, function(){
                 location.reload(1);
             });
         },
         error: function(request, status, error){
+            alertOops()
             console.log("Error");
             console.log(request)
             console.log(status)
@@ -109,8 +111,6 @@ function initMap() {
             places = (searchBox.getPlaces()).slice(0, 4);
         }
 
-
-
         // For each place, get the icon, name and location.
 
         bounds = new google.maps.LatLngBounds();
@@ -158,7 +158,6 @@ function initMap() {
 }
 
 
-
 function initMarkers() {
 
 
@@ -188,14 +187,25 @@ function initMarkers() {
 
                 icon = {
                     url: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
-                    size: new google.maps.Size(80, 80),
+                    size: new google.maps.Size(50, 50),
                     origin: new google.maps.Point(0, 0),
                     anchor: new google.maps.Point(17, 34),
                     scaledSize: new google.maps.Size(32, 32)
                 };
 
+                users.forEach(function(user){
 
-                infocontents = '<br><div class="pl-2"><p><strong><big><b><span class="title-window">' + appointment.title + '</span></b></big></strong><br><small><span class="title-help">' + appointment.address + '</span></small></p><p><span class="info-window"><small>Date: </small></span><b>' + new Date(appointment.date).toUTCString().split(' ', 4).join(' ') + '</b><br><span class="info-window"><small>Start time: </small></span><b>' + appointment.starttime.slice(0, 5) + '</b><br><span class="info-window"><small>End time: </small></span><b>' + appointment.endtime.slice(0, 5) + '</b></p><small><p><span class="info-window">Notes: </span><span class="notes ml-2">' + appointment.notes + '</span></p></small></div>'
+                    if (_.isEqual(user_id, user.user_id)) {
+
+                         infocontents = '<br><div class="pl-2"><b><span class="info-window">Your  event:</span></b><br><p><strong><big><b><span class="title-window">' + appointment.title + '</span></b></big></strong><br><small><span class="title-help">' + appointment.address + '</span></small></p><p><span class="info-window"><small>Date: </small></span><b>' + new Date(appointment.date).toUTCString().split(' ', 4).join(' ') + '</b><br><span class="info-window"><small>Start time: </small></span><b>' + appointment.starttime.slice(0, 5) + '</b><br><span class="info-window"><small>End time: </small></span><b>' + appointment.endtime.slice(0, 5) + '</b></p><small><p><span class="info-window">Notes: </span><span class="notes ml-2">' + appointment.notes + '</span></p></small></div>'
+
+                    }
+                    else if (_.isEqual(appointment.user_id, user.user_id)) {
+
+                         infocontents = '<br><div class="pl-2"><b><span class="info-window">' + user.username + '\'s  event:</span></b><br><p><strong><big><b><span class="title-window">' + appointment.title + '</span></b></big></strong><br><small><span class="title-help">' + appointment.address + '</span></small></p><p><span class="info-window"><small>Date: </small></span><b>' + new Date(appointment.date).toUTCString().split(' ', 4).join(' ') + '</b><br><span class="info-window"><small>Start time: </small></span><b>' + appointment.starttime.slice(0, 5) + '</b><br><span class="info-window"><small>End time: </small></span><b>' + appointment.endtime.slice(0, 5) + '</b></p><small><p><span class="info-window">Notes: </span><span class="notes ml-2">' + appointment.notes + '</span></p></small></div>'
+
+                    }
+                });
             }
         });
 
@@ -207,14 +217,26 @@ function initMarkers() {
 
                 icon = {
                     url: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
-                    size: new google.maps.Size(80, 80),
+                    size: new google.maps.Size(50, 50),
                     origin: new google.maps.Point(0, 0),
                     anchor: new google.maps.Point(17, 34),
                     scaledSize: new google.maps.Size(32, 32)
                 };
 
+                users.forEach(function(user){
 
-                infocontents = '<br><div class="pl-2"><p><strong><big><b><span class="title-window"><i> Invitation pending to: ' + pendingEvent.title + '</i></span></b></big></strong><br><small><span class="title-help">' + pendingEvent.address + '</span></small></p><p><span class="info-window"><small>Date: </small></span><b>' + new Date(pendingEvent.date).toUTCString().split(' ', 4).join(' ') + '</b><br><span class="info-window"><small>Start time: </small></span><b>' + pendingEvent.starttime.slice(0, 5) + '</b><br><span class="info-window"><small>End time: </small></span><b>' + pendingEvent.endtime.slice(0, 5) + '</b></p><small><p><span class="info-window">Notes: </span><span class="notes ml-2">' + pendingEvent.notes + '</span></p></small></div>'
+
+                    if (_.isEqual(user_id, user.user_id)) {
+
+                         infocontents = '<br><div class="pl-2"><b><span class="info-window">Your  event:</span></b><br><p><strong><big><b><span class="title-window"><i> Invitation pending to: ' + pendingEvent.title + '</i></span></b></big></strong><br><small><span class="title-help">' + pendingEvent.address + '</span></small></p><p><span class="info-window"><small>Date: </small></span><b>' + new Date(pendingEvent.date).toUTCString().split(' ', 4).join(' ') + '</b><br><span class="info-window"><small>Start time: </small></span><b>' + pendingEvent.starttime.slice(0, 5) + '</b><br><span class="info-window"><small>End time: </small></span><b>' + pendingEvent.endtime.slice(0, 5) + '</b></p><small><p><span class="info-window">Notes: </span><span class="notes ml-2">' + pendingEvent.notes + '</span></p></small></div>'
+
+                    }
+                    else if (_.isEqual(pendingEvent.user_id, user.user_id)) {
+
+                         infocontents = '<br><div class="pl-2"><b><span class="info-window">' + user.username + '\'s  event:</span></b><br><p><strong><big><b><span class="title-window"><i> Invitation pending to: ' + pendingEvent.title + '</i></span></b></big></strong><br><small><span class="title-help">' + pendingEvent.address + '</span></small></p><p><span class="info-window"><small>Date: </small></span><b>' + new Date(pendingEvent.date).toUTCString().split(' ', 4).join(' ') + '</b><br><span class="info-window"><small>Start time: </small></span><b>' + pendingEvent.starttime.slice(0, 5) + '</b><br><span class="info-window"><small>End time: </small></span><b>' + pendingEvent.endtime.slice(0, 5) + '</b></p><small><p><span class="info-window">Notes: </span><span class="notes ml-2">' + pendingEvent.notes + '</span></p></small></div>'
+
+                    }
+                });
             }
         });
 
@@ -222,13 +244,13 @@ function initMarkers() {
 
             icon = {
                 url: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
-                size: new google.maps.Size(80, 80),
+                size: new google.maps.Size(50, 50),
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(17, 34),
                 scaledSize: new google.maps.Size(32, 32)
             }; 
 
-            infocontents = '<form id="add_item_form"><div class="form-group"><input id="id" class="form-control" type="hidden" value="' + restaurant.id + '"></div><div class="form-group"><label for="title">Place:</label><input id="title" class="form-control" type="text" area-describedby="titleHelp" placeholder="' + restaurant.title + '"  value="' + restaurant.title + '" minlength="2" readonly></div><div class="form-group"><label for="address">Address:</label><input id="address" class="form-control" type="text" area-describedby="addressHelp" placeholder="' + restaurant.address + '"  value="' + restaurant.address + '" minlength="2" readonly></div><div class="form-group"><label for="date">Date:</label><input id="date" class="form-control" type="text" aria-describedby="dateHelp" placeholder="yyyy-mm-dd" required><small id="dateHelp" class="form-text text-muted">Please enter the date in the specified format.</small></div><div class="form-group"><label for="starttime">Start time:</label><input id="starttime" class="form-control time" type="time" aria-describedby="starttimeHelp" placeholder="hh:mm" required><small id="starttimeHelp" class="form-text text-muted">Please enter a start time between 00:00 and 23:59.</small></div><div class="form-group"><label for="endtime">End time:</label><input id="endtime" class="form-control time" type="time" aria-describedby="endtimeHelp" placeholder="hh:mm" required><small id="endtimeHelp" class="form-text text-muted">Please enter an end time between 00:00 and 23:59.</small></div><div class="form-group"><label for="textareaNotes">Notes:</label><textarea class="form-control" id="textareaNotes" rows="3"></textarea></div><input id="submit" type="submit" class="btn btn-secondary mb-5" value="Submit"></form>'
+            infocontents = '<form id="add_item_form"><div class="form-group"><input id="id" class="form-control" type="hidden" value="' + restaurant.id + '"></div><div class="form-group"><label for="title">Place:</label><input id="title" class="form-control" type="text" aria-describedby="titleHelp" placeholder="' + restaurant.title + '"  value="' + restaurant.title + '" minlength="2" readonly></div><div class="form-group"><label for="address">Address:</label><input id="address" class="form-control" type="text" aria-describedby="addressHelp" placeholder="' + restaurant.address + '"  value="' + restaurant.address + '" minlength="2" readonly></div><div class="form-group"><label for="date">Date:</label><input id="date" class="form-control" type="date" aria-describedby="dateHelp" placeholder="yyyy-mm-dd" required><small id="dateHelp" class="form-text text-muted">Please enter the date in the specified format.</small></div><div class="form-group"><label for="starttime">Start time:</label><input id="starttime" class="form-control time" type="time" aria-describedby="starttimeHelp" placeholder="hh:mm" required><small id="starttimeHelp" class="form-text text-muted">Please enter a start time between 00:00 and 23:59.</small></div><div class="form-group"><label for="endtime">End time:</label><input id="endtime" class="form-control time" type="time" aria-describedby="endtimeHelp" placeholder="hh:mm" required><small id="endtimeHelp" class="form-text text-muted">Please enter an end time between 00:00 and 23:59.</small></div><div class="form-group"><label for="textareaNotes">Notes:</label><textarea class="form-control" id="textareaNotes" rows="3"></textarea></div><input id="submit" type="submit" class="btn btn-secondary mb-5" value="Submit"></form>'
 
         }
 
@@ -252,6 +274,16 @@ function initMarkers() {
 
                         // Bind the click event on your button here
 
+                        var form = $('#add_item_form')
+
+                        form.validate({
+                            onsubmit: true,
+                            success: function(label) {
+                                label.addClass("valid").text("Ok!")
+                            },
+                            submitHandler: function() { alert("Submitted!") }
+                        });
+
                         $('#submit').on('click', function(e){
 
                             e.preventDefault();
@@ -267,8 +299,8 @@ function initMarkers() {
 
                             var newItem = jQuery.parseJSON( '{ "id": "' + id + '", "title": "' + title + '", "date": "' + date + '", "starttime": "' + starttime + '",  "endtime": "' + endtime + '", "notes": "' + notes + '", "address": "' + address + '", "position": "' + position + '" }')
                         
-                            search(newItem, true)
-                            alertEventCreated(title);
+                                search(newItem, true)
+                            
                         });
                     });
 
@@ -289,7 +321,7 @@ function setIconColor(restaurant, color) {
 
     icon = {
         url: "http://maps.google.com/mapfiles/ms/icons/" +color + "-dot.png",
-        size: new google.maps.Size(80, 80),
+        size: new google.maps.Size(50, 50),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(17, 34),
         scaledSize: new google.maps.Size(32, 32)
@@ -299,11 +331,36 @@ function setIconColor(restaurant, color) {
 }
 
 function alertEventCreated(title) {
-    alert("Your event at " + title + " was created. Check it out on the map!")
+    alert("Your event at " + title + " was created. Check it out on the map, or in your schedule!")
+}
+
+function alertOops() {
+    alert("Oops! Something went wrong. Please try again.")
 }
 
 
 $(document).ready(function(){
+
+    $.validator.addMethod( "date", function( value, element ) {
+        var check = false,
+            re = /^\d{4}\-\d{1,2}\-\d{1,2}$/,
+            adata, aaaa, mm, gg, xdata;
+        if ( re.test( value ) ) {
+            adata = value.split( "-" );
+            aaaa = parseInt( adata[ 0 ], 10 );
+            gg = parseInt( adata[ 2 ], 10 );
+            mm = parseInt( adata[ 1 ], 10 );
+            xdata = new Date( Date.UTC( aaaa, mm - 1, gg, 12, 0, 0, 0 ) );
+            if ( ( xdata.getUTCFullYear() === aaaa ) && ( xdata.getUTCMonth() === mm - 1 ) && ( xdata.getUTCDate() ===  gg ) ) {
+                check = true;
+            } else {
+                check = false;
+            }
+        } else {
+            check = false;
+        }
+        return this.optional( element ) || check;
+    }, $.validator.messages.date);
 
     $('body').fadeIn(500);
 

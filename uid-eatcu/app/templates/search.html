@@ -42,6 +42,14 @@
             var pending = {{pending|tojson|safe}}
         </script>
 
+        <script type=text/javascript>
+            var users = {{users|tojson|safe}}
+        </script>
+
+        <script type=text/javascript>
+            var user_id = {{user_id|safe}}
+        </script>
+
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCgLtBGAynwQz8irTIbZ0USNbPIBY5xYhQ&libraries=places&callback=initMap"></script>
 
 <!-- @TODO: add media < XXX pixels move expand on map -->

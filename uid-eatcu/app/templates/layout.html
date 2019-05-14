@@ -31,6 +31,10 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 
         <script  src="https://cdn.jsdelivr.net/npm/lodash@4.17.11/lodash.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.0/dist/jquery.validate.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.0/dist/additional-methods.js"></script>
+
         <style>
 
             header{
@@ -107,6 +111,23 @@
             .error{
                 color: red;
                 font-size: small;
+            }
+
+            .green{
+                color: green;
+
+            }
+
+            .amber{
+                color: #FF8800;
+            }
+
+            .red{
+                color: #CC0000;
+            }
+
+            .error.valid{
+                color: green;
             }
 
             .title {
@@ -245,10 +266,17 @@
 
             #search-discover-input::placeholder {
                 font-size: 14px;
-                color: rgba(244, 67, 54, 0.5);
-                text-shadow: 0.75px 0.75px;
+                color: #fb8c00;
             }
 
+            .navbar-expand-sm .navbar-nav .dropdown-menu {
+                right: 0;
+            }
+
+            .dropdown-menu {
+                float: none;
+                left: auto;
+            }
 
             @media screen and (max-width: 770px) {
 
@@ -268,6 +296,17 @@
 
                 }
 
+            }
+
+            @media screen and (max-width: 576px) {
+
+                .navbar-collapse {
+                    background: rgba(248, 248, 248, .9)
+                }
+
+                #navbarNav {
+                    padding: 0 5px 0 5px;
+                }
             }
 
         </style>

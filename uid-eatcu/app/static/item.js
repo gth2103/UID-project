@@ -156,7 +156,7 @@ function deleteInvite(name, event_key){
 
         e.preventDefault()
 
-        if (window.confirm("Are you sure you want to delete this invition?")) {
+        if (window.confirm("Are you sure you want to delete this invitation?")) {
 
             var url = "/remove_invitation/" + event_key + "/" + name
 
@@ -201,9 +201,19 @@ function updateEvent() {
 
         $('button[accesskey|="' +  appointment.id + '"].update').on('click', function() {
 
-            var appointmentForm = '<form id="add_item_form"><div class="form-group"><input id="id" class="form-control" type="hidden" value="' + appointment.id + '"></div><div class="form-group"><label for="title">Place:</label><input id="title" class="form-control" type="text" area-describedby="titleHelp" placeholder="' + appointment.title + '"  value="' + appointment.title + '" minlength="2" readonly></div><div class="form-group"><label for="address">Address:</label><input id="address" class="form-control" type="text" area-describedby="addressHelp" placeholder="' + appointment.address + '"  value="' + appointment.address + '" minlength="2" readonly></div><div class="form-group"><label for="date">Date:</label><input id="date" class="form-control" type="text" aria-describedby="dateHelp" value="' + appointment.date + '" required><small id="dateHelp" class="form-text text-muted">Please enter the date in the specified format.</small></div><div class="form-group"><label for="starttime">Start time:</label><input id="starttime" class="form-control time" type="time" aria-describedby="starttimeHelp" value="' + appointment.starttime.slice(0, 5) + '" required><small id="starttimeHelp" class="form-text text-muted">Please enter a start time between 00:00 and 23:59.</small></div><div class="form-group"><label for="endtime">End time:</label><input id="endtime" class="form-control time" type="time" aria-describedby="endtimeHelp" value="' + appointment.endtime.slice(0, 5) + '" required><small id="endtimeHelp" class="form-text text-muted">Please enter an end time between 00:00 and 23:59.</small></div><div class="form-group"><label for="textareaNotes">Notes:</label><textarea class="form-control" id="textareaNotes" rows="3">' + appointment.notes + '</textarea></div><input id="submit" type="submit" class="btn btn-secondary mb-5" value="Submit"><button accesskey="' + appointment.id + '" type="button" class="cancel btn btn-outline-danger mt-2 ml-2 float-right">Cancel</button></form>'
+            var appointmentForm = '<form id="add_item_form"><div class="form-group"><input id="id" class="form-control" type="hidden" value="' + appointment.id + '"></div><div class="form-group"><label for="title">Place:</label><input id="title" class="form-control" type="text" area-describedby="titleHelp" placeholder="' + appointment.title + '"  value="' + appointment.title + '" minlength="2" readonly></div><div class="form-group"><label for="address">Address:</label><input id="address" class="form-control" type="text" area-describedby="addressHelp" placeholder="' + appointment.address + '"  value="' + appointment.address + '" minlength="2" readonly></div><div class="form-group"><label for="date">Date:</label><input id="date" class="form-control" type="date" aria-describedby="dateHelp" placeholder="yyyy-mm-dd" value="' + appointment.date + '" required><small id="dateHelp" class="form-text text-muted">Please enter the date in the specified format.</small></div><div class="form-group"><label for="starttime">Start time:</label><input id="starttime" class="form-control time" type="time" aria-describedby="starttimeHelp" placeholder="hh:mm" value="' + appointment.starttime.slice(0, 5) + '" required><small id="starttimeHelp" class="form-text text-muted">Please enter a start time between 00:00 and 23:59.</small></div><div class="form-group"><label for="endtime">End time:</label><input id="endtime" class="form-control time" type="time" aria-describedby="endtimeHelp" placeholder="hh:mm" value="' + appointment.endtime.slice(0, 5) + '" required><small id="endtimeHelp" class="form-text text-muted">Please enter an end time between 00:00 and 23:59.</small></div><div class="form-group"><label for="textareaNotes">Notes:</label><textarea class="form-control" id="textareaNotes" rows="3">' + appointment.notes + '</textarea></div><input id="submit" type="submit" class="btn btn-secondary mb-5" value="Submit"><button accesskey="' + appointment.id + '" type="button" class="cancel btn btn-outline-danger mt-2 ml-2 float-right">Cancel</button></form>'
 
             $('div.' + appointment.id).html(appointmentForm)
+
+            var form = $('#add_item_form')
+
+            form.validate({
+                onsubmit: true,
+                success: function(label) {
+                    label.addClass("valid").text("Ok!")
+                },
+                submitHandler: function() { alert("Submitted!") }
+            });
 
             $('#submit').on('click', function(e){
 
@@ -218,33 +228,35 @@ function updateEvent() {
 
                 e.preventDefault();
 
-                if (window.confirm("Are you sure you want to update this event?")) {
+                if(form.valid()){
 
-                    $.ajax({
-                        type: "POST",
-                        url: url,                
-                        dataType : "json",
-                        contentType: "application/json; charset=utf-8",
-                        data : JSON.stringify(newItem),
-                        success: function(result){
-                            alertUpdated();
-                            $('body').fadeOut(500, function(){
-                                location.reload(1);
-                            });
-                        },
-                        error: function(request, status, error){
-                            alertUpdated();
-                            $('body').fadeOut(500, function(){
-                                location.reload(1);
-                            });
-                        }
-                    });
+                    if (window.confirm("Are you sure you want to update this event?")) {
+
+                        $.ajax({
+                            type: "POST",
+                            url: url,                
+                            dataType : "json",
+                            contentType: "application/json; charset=utf-8",
+                            data : JSON.stringify(newItem),
+                            success: function(result){
+                                alertUpdated();
+                                $('body').fadeOut(500, function(){
+                                    location.reload(1);
+                                });
+                            },
+                            error: function(request, status, error){
+                                alertOops();
+                            }
+                        });
+                    }
+                }
+                else {
                 } 
             }); 
 
             $('.cancel').on('click', function() {
 
-                $('body').fadeOut(500, function(){
+                $('body').fadeOut(250, function(){
                     location.reload(1);
                 });      
             });   
@@ -252,7 +264,32 @@ function updateEvent() {
     });
 }
 
+function alertOops() {
+    alert("Oops! Something went wrong. Please try again.")
+}
+
 $(document).ready(function(){
+
+    $.validator.addMethod( "date", function( value, element ) {
+        var check = false,
+            re = /^\d{4}\-\d{1,2}\-\d{1,2}$/,
+            adata, aaaa, mm, gg, xdata;
+        if ( re.test( value ) ) {
+            adata = value.split( "-" );
+            aaaa = parseInt( adata[ 0 ], 10 );
+            gg = parseInt( adata[ 2 ], 10 );
+            mm = parseInt( adata[ 1 ], 10 );
+            xdata = new Date( Date.UTC( aaaa, mm - 1, gg, 12, 0, 0, 0 ) );
+            if ( ( xdata.getUTCFullYear() === aaaa ) && ( xdata.getUTCMonth() === mm - 1 ) && ( xdata.getUTCDate() ===  gg ) ) {
+                check = true;
+            } else {
+                check = false;
+            }
+        } else {
+            check = false;
+        }
+        return this.optional( element ) || check;
+    }, $.validator.messages.date);
 
     $('body').fadeIn(500);
 

@@ -76,7 +76,30 @@ def search():
     global appointments_index
     global pending_index
 
+    restaurants_index = len(restaurants)
+
+    user_id = current_user.id
+
+    users = []
+
+    users_index = len(users)
+
+    all_users = User.query.all()
+
+    for user in all_users:
+
+        userObj  = {
+            "username": user.username,
+            "user_id": user.id
+        }
+
+        if userObj not in users:
+            users.append(userObj)
+            users_index += 1
+
     pending = []
+
+    pending_index =  len(pending)
 
     pendingEvents =  get_pending_events(current_user.id)
 
@@ -99,6 +122,8 @@ def search():
 
 
     appointments = []
+
+    appointments_index = len(appointments)
 
     events = get_recent_events(current_user.id)
 
@@ -188,7 +213,7 @@ def search():
 
             return jsonify(restaurants = restaurants, appointments = appointments)       
     else:
-        return render_template('search.html', appointments = appointments, restaurants = restaurants, restaurants_index = restaurants_index, appointments_index = appointments_index, pending =  pending)
+        return render_template('search.html', appointments = appointments, restaurants = restaurants, restaurants_index = restaurants_index, appointments_index = appointments_index, pending =  pending, users = users, user_id = user_id)
 
 
 
@@ -199,13 +224,24 @@ def item():
     global users
     global invites
     global pending
+    global appointments_index
+    global pending_index
     global users_index
     global invites_index
+
+    appointments_index = len(appointments)
+
+    pending_index =  len(pending)
+
     username = current_user.username
     user_id = current_user.id
 
     users =  []
     invites =  []
+
+    users_index = len(users)
+
+    invites_index = len(invites)
 
     all_users = User.query.all()
     invited = UserEvent.query.all()
@@ -235,16 +271,19 @@ def item():
             invites.append(new_invtee_entry)
             invites_index += 1
     
-    return render_template('item.html',title='Appointments', users=users, appointments = appointments, invites = invites,  pending = pending, username=username, user_id=user_id);
+    return render_template('item.html',title='Appointments', users=users, appointments = appointments, invites = invites,  pending = pending, username=username, user_id=user_id, appointments_index=appointments_index, pending_index  = pending_index);
 
 @app.route('/remove_event/<event_id>', methods=['POST'])
 @login_required
 def remove_event(event_id):
     global appointments
     global appointments_index
+
     remove_event(event_id)
 
     appointments = [];
+
+    appointments_index = len(appointments)
 
     events = get_recent_events(current_user.id)
 
@@ -296,6 +335,8 @@ def update_event(event_id):
 
     appointments = [];
 
+    appointments_index = len(appointments)
+
     events = get_recent_events(current_user.id)
 
     for event in events:
@@ -315,7 +356,7 @@ def update_event(event_id):
         if new_item_entry not in appointments:
             appointments.append(new_item_entry)
             appointments_index += 1
-    return redirect(url_for('search'));
+    return jsonify(appointments = appointments);
 
 
 @app.route('/remove_invitation/<event_id>/<username>', methods=['POST'])
@@ -323,10 +364,13 @@ def update_event(event_id):
 def remove_invitation(event_id, username):
     global pending
     global pending_index
+
     user = User.query.filter_by(username=username).first()
     delete_user_event(event_id, user.id)
 
     pending = []
+
+    pending_index =  len(pending)
 
     pendingEvents = get_pending_events(current_user.id)
 
@@ -355,10 +399,13 @@ def accept_invitation(event_id, username):
     global pending_index
     global appointments
     global appointments_index
+
     user = User.query.filter_by(username=username).first()
     accept_user_event(event_id, user.id)
 
     pending = []
+
+    pending_index =  len(pending)
 
     pendingEvents = get_pending_events(current_user.id)
 
@@ -381,6 +428,8 @@ def accept_invitation(event_id, username):
             pending_index += 1
 
     appointments = []
+
+    appointments_index = len(appointments)
 
     events = get_recent_events(current_user.id)
 

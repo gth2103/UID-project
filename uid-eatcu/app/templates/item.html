@@ -6,8 +6,8 @@
         <header>
             What's happening?
         </header>
-        <small class="text-muted headerHelpLeft d-inline-block">See what events are coming up!</small>
-        <small class="text-muted headerHelpRight d-inline-block text-right">Update events, or invite friends below.</small>
+        <small class="text-muted headerHelpLeft d-inline-block">See what events are coming up!<br>You're attending <span class="green"><strong>{{ appointments_index }}</strong></span> {% if appointments_index ==  1 %}event{% else %}events{% endif %}, and you have <span  class="amber"><strong>{{ pending_index }}</strong></span> {% if pending_index ==  1 %}invitation{% else %}invitations{% endif %} pending.</small>
+        <small class="text-muted headerHelpRight d-inline-block text-right">Update your events, and invitations below.</small>
         <div id="appointments">
         </div>
     </div>
